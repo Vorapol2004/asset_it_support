@@ -1,5 +1,6 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.borrow;
 
+import com.plub_kao.asset_it_support.entity.employee.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,8 @@ public class Borrow {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employee_id", nullable = false)
-    private com.plub_kao.asset_it_support.entity.Employee employee;
+    private Employee employee;
+
 
     @Column(name = "borrow_date", nullable = false)
     private LocalDate borrowDate;
