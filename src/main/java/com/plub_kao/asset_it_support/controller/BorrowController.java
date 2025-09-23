@@ -22,7 +22,4 @@ public class BorrowController {
        List<BorrowView> borrowAll = borrowService.getAllBorrowedEmployeeIds();
        return ResponseEntity.ok(borrowAll);
     }
-
-
-
 }
