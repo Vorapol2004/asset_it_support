@@ -28,26 +28,31 @@ public class EmployeeController {
     }
 
     @GetMapping("/role/{id}")
-    public List<EmployeeViewRole> findChooseRoles(@PathVariable Integer id) {
-        List<EmployeeViewRole> employees = employeeService.findChooseRoles(id);
+    public List<EmployeeViewRole> ChooseEmployeeRoles(@PathVariable Integer id) {
+        List<EmployeeViewRole> employees = employeeService.ChooseEmployeeRoles(id);
         return employees;
     }
+
 
     @GetMapping("/dep/{id}")
-    public List<EmployeeViewDepartment> findChooseDepartments(@PathVariable Integer id) {
-        List<EmployeeViewDepartment> employees = employeeService.findChooseDepartments(id);
-        return employees;
+    public ResponseEntity<List<EmployeeViewDepartment>> ChooseEmployeeDepartments(@PathVariable Integer id) {
+        List<EmployeeViewDepartment> employee = employeeService.ChooseEmployeeDepartments(id);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
-//    @GetMapping("/dep/{idDep}/role/{idRole}")
-//    public ResponseEntity<List<EmployeeViewDepAndRole>> findChooseDepartmentsAndRoles(@PathVariable Integer idDep,
-//                                                                                      @PathVariable Integer idRole) {
-//        List <EmployeeViewDepAndRole> DepAndRole = employeeService.findChooseDepAndRoles(idDep, idRole);
-//        if(DepAndRole.isEmpty()){ return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-//        return ResponseEntity.ok(DepAndRole);
-//        }
 
-    // ✅ ✅ เพิ่มฟังก์ชันใหม่ "ค้นหาด้วย keyword"
+    @GetMapping("/dep/{idDep}/role/{idRole}")
+    public ResponseEntity<List<EmployeeViewDepAndRole>> ChoChooseEmployeeDepartmentAndRole
+            (@PathVariable Integer idDep, @PathVariable Integer idRole) {
+        List<EmployeeViewDepAndRole> DepAndRole = employeeService.ChooseEmployeeDepartmentAndRole(idDep, idRole);
+        if (DepAndRole.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(DepAndRole);
+    }
+
+
+    // ค้นหาด้วย keyword
     @GetMapping("/search")
     public ResponseEntity<List<EmployeeViewDepAndRole>> searchEmployees(@RequestParam String keyword) {
         List<EmployeeViewDepAndRole> employees = employeeService.searchEmployee(keyword);

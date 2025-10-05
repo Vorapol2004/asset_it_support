@@ -21,7 +21,17 @@ public class EquipmentService {
         return equipmentRepository.findAllEquipment();
     }
 
-    public List<EquipmentView> findEquipmentAll(@Param("keyword") String keyword) {
-        return equipmentRepository.findEquipmentAll(keyword);
+
+    public List<EquipmentView> ChooseEquipmentType(@Param("equipmentTypeId") int equipmentTypeId) {
+        return equipmentRepository.ChooseEquipmentType(equipmentTypeId);
+    }
+
+    public List<EquipmentView> ChooseEquipmentStatus(@Param("equipmentStatusId") int equipmentStatusId) {
+        return equipmentRepository.ChooseEquipmentStatus(equipmentStatusId);
+    }
+
+
+    public List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword) {
+        return equipmentRepository.searchEquipmentKeyword(keyword);
     }
 }

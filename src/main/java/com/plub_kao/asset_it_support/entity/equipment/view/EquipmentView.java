@@ -14,7 +14,11 @@ public interface EquipmentView {
 
     Integer getEquipmentTypeId();
 
+    String getEquipmentTypeName();
+
     Integer getEquipmentStatusId();
+
+    String getEquipmentStatusName();
 
     String getLicenseKey();
 

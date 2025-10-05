@@ -44,7 +44,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                 WHERE
                  	r.id = :roleId
             """, nativeQuery = true)
-    List<EmployeeViewRole> findChooseRoles(@Param("roleId") Integer roleId);
+    List<EmployeeViewRole> ChooseEmployeeRoles(@Param("roleId") Integer roleId);
 
 
     //ดึงข้อมูล emloyee เฉพาะ department นั้นๆโดยเฉพาะ
@@ -63,9 +63,36 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                 WHERE
                  	d.id = :departmentId
             """, nativeQuery = true)
-    List<EmployeeViewDepartment> findChooseDepartments(@Param("departmentId") Integer departmentId);
+    List<EmployeeViewDepartment> ChooseEmployeeDepartments(@Param("departmentId") Integer departmentId);
+
 
     //ดึงข้อมูล emloyee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
+    @Query(value = """
+                SELECT
+                    e.id,
+                    e.first_name,
+                    e.last_name,
+                    e.email,
+                    e.department_id,
+                    d.department_name,
+                    e.role_id,
+                    r.role_name
+                FROM
+                    `employee` e
+                LEFT JOIN\s
+                	department d ON  d.id = e.department_id
+                LEFT JOIN
+                    role r ON r.id = e.role_id
+                WHERE
+                    d.id = :descriptionId
+                    AND r.id = :roleId
+            """, nativeQuery = true)
+    List<EmployeeViewDepAndRole> ChooseEmployeeDepartmentAndRole(
+            @Param("descriptionId") Integer descriptionId,
+            @Param("roleId") Integer roleId);
+
+
+    //ค้นหาชื่อ employee ด้วย keyword
     @Query(value = """
             
                     SELECT

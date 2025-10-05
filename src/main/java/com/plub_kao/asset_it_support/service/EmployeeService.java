@@ -25,24 +25,24 @@ public class EmployeeService {
 
 
     //ดึงข้อมูล employee เฉพาะ role นั้นๆโดยเฉพาะ
-    public List<EmployeeViewRole> findChooseRoles(Integer roleId) {
-        List<EmployeeViewRole> employees = employeeRepository.findChooseRoles(roleId);
+    public List<EmployeeViewRole> ChooseEmployeeRoles(Integer roleId) {
+        List<EmployeeViewRole> employees = employeeRepository.ChooseEmployeeRoles(roleId);
         return employees;
     }
 
 
     //ดึงข้อมูล emloyee เฉพาะ department นั้นๆโดยเฉพาะ
-    public List<EmployeeViewDepartment> findChooseDepartments(Integer departmentId) {
-        List<EmployeeViewDepartment> employees = employeeRepository.findChooseDepartments(departmentId);
+    public List<EmployeeViewDepartment> ChooseEmployeeDepartments(Integer departmentId) {
+        List<EmployeeViewDepartment> employees = employeeRepository.ChooseEmployeeDepartments(departmentId);
         return employees;
     }
 
 
     //ดึงข้อมูล emloyee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
-//    public List<EmployeeViewDepAndRole> findChooseDepAndRoles(Integer depId, Integer roleId) {
-//        List<EmployeeViewDepAndRole> emloyees = employeeRepository.findChooseDepAndRole(depId, roleId);
-//        return emloyees;
-//    }
+    public List<EmployeeViewDepAndRole> ChooseEmployeeDepartmentAndRole(Integer depId, Integer roleId) {
+        List<EmployeeViewDepAndRole> emloyees = employeeRepository.ChooseEmployeeDepartmentAndRole(depId, roleId);
+        return emloyees;
+    }
 
     // ✅ เพิ่ม method ใหม่ — ค้นหาด้วย keyword + ตัวกรอง (role, department)
     public List<EmployeeViewDepAndRole> searchEmployee(String keyword) {
