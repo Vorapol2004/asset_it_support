@@ -1,5 +1,7 @@
 package com.plub_kao.asset_it_support.entity;
 
+import com.plub_kao.asset_it_support.entity.borrow.Borrow;
+import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import java.time.Instant;
 @Table(name = "borrow_equipment")
 public class BorrowEquipment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -20,10 +23,14 @@ public class BorrowEquipment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "borrow_status_id", nullable = false)
-    private com.plub_kao.asset_it_support.entity.BorrowStatus borrowStatus;
+    private BorrowStatus borrowStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "equipment_id", nullable = false)
-    private com.plub_kao.asset_it_support.entity.Equipment equipment;
+    private Equipment equipment;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "borrow_id", nullable = false)
+    private Borrow borrow;
 
 }

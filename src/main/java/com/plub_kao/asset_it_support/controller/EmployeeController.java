@@ -9,10 +9,7 @@ import com.plub_kao.asset_it_support.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,15 +39,21 @@ public class EmployeeController {
         return employees;
     }
 
-    @GetMapping("/dep/{idDep}/role/{idRole}")
-    public ResponseEntity<List<EmployeeViewDepAndRole>> findChooseDepartmentsAndRoles(@PathVariable Integer idDep,
-                                                                                      @PathVariable Integer idRole) {
-        List <EmployeeViewDepAndRole> DepAndRole = employeeService.findChooseDepAndRoles(idDep, idRole);
-        if(DepAndRole.isEmpty()){ return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-        return ResponseEntity.ok(DepAndRole);
+//    @GetMapping("/dep/{idDep}/role/{idRole}")
+//    public ResponseEntity<List<EmployeeViewDepAndRole>> findChooseDepartmentsAndRoles(@PathVariable Integer idDep,
+//                                                                                      @PathVariable Integer idRole) {
+//        List <EmployeeViewDepAndRole> DepAndRole = employeeService.findChooseDepAndRoles(idDep, idRole);
+//        if(DepAndRole.isEmpty()){ return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
+//        return ResponseEntity.ok(DepAndRole);
+//        }
+
+    // ✅ ✅ เพิ่มฟังก์ชันใหม่ "ค้นหาด้วย keyword"
+    @GetMapping("/search")
+    public ResponseEntity<List<EmployeeViewDepAndRole>> searchEmployees(@RequestParam String keyword) {
+        List<EmployeeViewDepAndRole> employees = employeeService.searchEmployee(keyword);
+        if (employees.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-
-
-
+        return ResponseEntity.ok(employees);
+    }
 }

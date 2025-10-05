@@ -19,7 +19,7 @@ public class BorrowController {
 
     @GetMapping("/all")
     public ResponseEntity<List<BorrowView>> getAllBorrowedEmployeeIds() {
-       List<BorrowView> borrowAll = borrowService.getAllBorrowedEmployeeIds();
-       return ResponseEntity.ok(borrowAll);
+        List<BorrowView> borrowAll = borrowService.getAllBorrowedEmployeeIds();
+        return ResponseEntity.ok(borrowAll);
     }
 }

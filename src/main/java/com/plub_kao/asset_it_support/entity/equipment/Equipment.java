@@ -1,8 +1,14 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.equipment;
 
+import com.plub_kao.asset_it_support.entity.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.EquipmentType;
+import com.plub_kao.asset_it_support.entity.Lot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -10,6 +16,7 @@ import lombok.Setter;
 @Table(name = "equipment")
 public class Equipment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -27,14 +34,25 @@ public class Equipment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "equipment_status_id", nullable = false)
-    private com.plub_kao.asset_it_support.entity.EquipmentStatus equipmentStatus;
+    private EquipmentStatus equipmentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_type_id")
-    private com.plub_kao.asset_it_support.entity.EquipmentType equipmentType;
+    private EquipmentType equipmentType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "lot_id", nullable = false)
-    private com.plub_kao.asset_it_support.entity.Lot lot;
+    private Lot lot;
+
+    @Column(name = "license_key")
+    private String licenseKey;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 
 }

@@ -1,5 +1,7 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.room;
 
+import com.plub_kao.asset_it_support.entity.Department;
+import com.plub_kao.asset_it_support.entity.Floor;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

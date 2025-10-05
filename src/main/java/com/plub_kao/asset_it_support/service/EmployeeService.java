@@ -24,7 +24,6 @@ public class EmployeeService {
     }
 
 
-
     //ดึงข้อมูล employee เฉพาะ role นั้นๆโดยเฉพาะ
     public List<EmployeeViewRole> findChooseRoles(Integer roleId) {
         List<EmployeeViewRole> employees = employeeRepository.findChooseRoles(roleId);
@@ -40,9 +39,18 @@ public class EmployeeService {
 
 
     //ดึงข้อมูล emloyee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
-    public List<EmployeeViewDepAndRole> findChooseDepAndRoles(Integer depId, Integer roleId) {
-        List<EmployeeViewDepAndRole> emloyees = employeeRepository.findChooseDepAndRole(depId, roleId);
-        return emloyees;
+//    public List<EmployeeViewDepAndRole> findChooseDepAndRoles(Integer depId, Integer roleId) {
+//        List<EmployeeViewDepAndRole> emloyees = employeeRepository.findChooseDepAndRole(depId, roleId);
+//        return emloyees;
+//    }
+
+    // ✅ เพิ่ม method ใหม่ — ค้นหาด้วย keyword + ตัวกรอง (role, department)
+    public List<EmployeeViewDepAndRole> searchEmployee(String keyword) {
+        // ถ้า keyword เป็น null ให้ใส่ค่าว่างไว้ จะได้ค้นหาได้หมด
+        if (keyword == null) {
+            keyword = "";
+        }
+        return employeeRepository.findEmployeeByDepRoleAndKeyword(keyword);
     }
 
 
