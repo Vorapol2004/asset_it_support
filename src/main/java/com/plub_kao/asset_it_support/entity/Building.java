@@ -1,22 +1,25 @@
 package com.plub_kao.asset_it_support.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "building")
 public class Building {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "building_name", nullable = false, length = 50)
     private String buildingName;
 
+    public Building(String buildingName) {
+        this.buildingName = buildingName;
+    }
 }

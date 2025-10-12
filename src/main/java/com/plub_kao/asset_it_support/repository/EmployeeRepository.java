@@ -13,6 +13,15 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+
+    @Query(value = """
+                SELECT
+                    *
+                FROM
+                    `employee` e WHERE e.id = :employeeId
+            """, nativeQuery = true)
+    public Employee findByEmployeeId(Integer employeeId);
+
     //ดึงข้อมูล employee ออกมาทั้งหมด
     @Query(value = """
                 SELECT

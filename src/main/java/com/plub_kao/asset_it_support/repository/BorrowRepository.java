@@ -2,7 +2,7 @@ package com.plub_kao.asset_it_support.repository;
 
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
-import com.plub_kao.asset_it_support.entity.borrow.view.BorrowViewTest;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,27 +18,30 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     //ดึงการธุรกรรมการยืมที่มีอยู่ทั้งหมด
     @Query(value = """
                     SELECT
-                       b.id ,
-                       e.first_name,
-                       e.last_name,
-                       e.email,
-                       b.borrow_date,
-                       be.return_date,
-                       eq.equipment_name,
-                       eq.brand,
-                       eq.model,
-                       eq.serial_number,
-                       eq.license_key,
-                       bs.borrow_status_name,
-                       eqs.equipment_status_name
-            
-                   FROM borrow b
-                   LEFT JOIN
-                   employee e ON e.id = b.employee_id
-                   INNER JOIN borrow_equipment be ON b.id = be.borrow_id
-                   LEFT JOIN borrow_status bs ON bs.id = be.borrow_status_id
-                   LEFT JOIN equipment eq ON eq.id = be.equipment_id
-                   LEFT JOIN equipment_status eqs ON eqs.id = eq.equipment_status_id
+                                                                                        b.id,
+                                                                                        e.first_name,
+                                                                                        e.last_name,
+                                                                                        e.email,
+                                                                                        b.borrow_date,
+                                                                                        be.return_date,
+                                                                                        eq.equipment_name,
+                                                                                        eq.brand,
+                                                                                        eq.model,
+                                                                                        eq.serial_number,
+                                                                                        eq.license_key,
+                                                                                        eqs.equipment_status_name
+                                                                                    FROM
+                                                                                        borrow b
+                                                                                    LEFT JOIN employee e ON
+                                                                                        e.id = b.employee_id
+                                                                                    INNER JOIN borrow_equipment be ON
+                                                                                        b.id = be.borrow_id
+                                                                                    LEFT JOIN borrow_equipment_status bes ON
+                                                                                        bes.id = be.borrow_equipment_status_id
+                                                                                    LEFT JOIN equipment eq ON
+                                                                                        eq.id = be.equipment_id
+                                                                                    LEFT JOIN equipment_status eqs ON
+                                                                                        eqs.id = eq.equipment_status_id
             """, nativeQuery = true)
     List<BorrowView> getAllBorrowedEmployeeIds();
 
@@ -46,7 +49,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     //filter borrow status
     @Query(value = """
                    SELECT
-                       b.id ,
+                       b.id,
                        e.first_name,
                        e.last_name,
                        e.email,
@@ -57,16 +60,19 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                        eq.model,
                        eq.serial_number,
                        eq.license_key,
-                       bs.borrow_status_name,
                        eqs.equipment_status_name
-            
-                   FROM borrow b
-                   LEFT JOIN
-                   employee e ON e.id = b.employee_id
-                   INNER JOIN borrow_equipment be ON b.id = be.borrow_id
-                   LEFT JOIN borrow_status bs ON bs.id = be.borrow_status_id
-                   LEFT JOIN equipment eq ON eq.id = be.equipment_id
-                   LEFT JOIN equipment_status eqs ON eqs.id = eq.equipment_status_id
+                   FROM
+                       borrow b
+                   LEFT JOIN employee e ON
+                       e.id = b.employee_id
+                   INNER JOIN borrow_equipment be ON
+                       b.id = be.borrow_id
+                   LEFT JOIN borrow_equipment_status bes ON
+                       bes.id = be.borrow_equipment_status_id
+                   LEFT JOIN equipment eq ON
+                       eq.id = be.equipment_id
+                   LEFT JOIN equipment_status eqs ON
+                       eqs.id = eq.equipment_status_id
                    WHERE (:statusId IS NULL OR bs.id = :statusId)
                    ORDER BY b.borrow_date DESC
             """, nativeQuery = true)
