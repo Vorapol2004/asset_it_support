@@ -1,12 +1,9 @@
-package com.plub_kao.asset_it_support.controller;
+package com.plub_kao.asset_it_support.controller.main;
 
 
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeViewDepartment;
-import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -47,12 +47,5 @@ public class Equipment {
     @Column(name = "license_key")
     private String licenseKey;
 
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
 
 }

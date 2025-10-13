@@ -1,8 +1,7 @@
-package com.plub_kao.asset_it_support.controller;
+package com.plub_kao.asset_it_support.controller.secondary;
 
 
 import com.plub_kao.asset_it_support.entity.Building;
-import com.plub_kao.asset_it_support.repository.BuildingRepository;
 import com.plub_kao.asset_it_support.service.BuildingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

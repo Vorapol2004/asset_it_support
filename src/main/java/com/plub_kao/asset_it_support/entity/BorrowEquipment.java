@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Table(name = "borrow_equipment")
 public class BorrowEquipment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -34,14 +35,14 @@ public class BorrowEquipment {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "borrow_equipment_status_id", nullable = false)
-    private BorrowEquipmentStatus borrowEquipmentStatus;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "borrow_equipment_status_id", nullable = false)
+//    private BorrowEquipmentStatus borrowEquipmentStatus;
 
-
-    public BorrowEquipment(Equipment equipment, LocalDate dueDate, BorrowEquipmentStatus borrowEquipmentStatus) {
-        this.equipment = equipment;
-        this.dueDate = dueDate;
-        this.borrowEquipmentStatus = borrowEquipmentStatus;
-    }
+//    public BorrowEquipment(Borrow borrow, Equipment equipment, BorrowEquipmentStatus borrowEquipmentStatus, LocalDate dueDate) {
+//        this.borrow = borrow;
+//        this.equipment = equipment;
+//        this.borrowEquipmentStatus = borrowEquipmentStatus;
+//        this.dueDate = dueDate;
+//    }
 }

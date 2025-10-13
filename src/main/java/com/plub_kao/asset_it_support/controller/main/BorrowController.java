@@ -1,6 +1,6 @@
-package com.plub_kao.asset_it_support.controller;
+package com.plub_kao.asset_it_support.controller.main;
 
-import com.plub_kao.asset_it_support.entity.borrow.Borrow;
+import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.repository.BorrowRepository;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class BorrowController {
     }
 
     @PostMapping("/add")
-    public Borrow NewBorrow(@RequestBody NewBorrow newBorrow) {
+    public BorrowResponse NewBorrow(@RequestBody NewBorrow newBorrow) {
         return borrowService.newBorrow(newBorrow);
     }
 }

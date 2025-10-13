@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.entity.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plub_kao.asset_it_support.entity.Department;
 import com.plub_kao.asset_it_support.entity.Role;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "employee")
 public class Employee {
     @Id

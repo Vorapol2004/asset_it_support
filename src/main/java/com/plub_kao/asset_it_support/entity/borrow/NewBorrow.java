@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 public class NewBorrow {
 
+
     private Integer employee;
     private LocalDate borrowDate;
     private String referenceDoc;

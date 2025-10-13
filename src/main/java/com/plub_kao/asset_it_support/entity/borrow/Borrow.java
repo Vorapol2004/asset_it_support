@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.entity.borrow;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
 import com.plub_kao.asset_it_support.entity.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
@@ -24,6 +25,7 @@ public class Borrow {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Employee employee;
 
     @Column(name = "borrow_date", nullable = false)
@@ -39,11 +41,10 @@ public class Borrow {
     @JoinColumn(name = "borrow_status_id", nullable = false)
     private BorrowStatus borrowStatus;
 
-    public Borrow(Employee employee, LocalDate borrowDate, List<BorrowEquipment> borrowEquipment, BorrowStatus borrowStatus, String referenceDoc) {
+    public Borrow(Employee employee, BorrowStatus borrowStatus, LocalDate borrowDate, String referenceDoc) {
         this.employee = employee;
-        this.borrowDate = borrowDate;
-        this.borrowEquipment = borrowEquipment;
         this.borrowStatus = borrowStatus;
+        this.borrowDate = borrowDate;
         this.referenceDoc = referenceDoc;
     }
 }
