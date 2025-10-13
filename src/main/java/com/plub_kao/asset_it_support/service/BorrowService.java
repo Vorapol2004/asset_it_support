@@ -46,16 +46,23 @@ public class BorrowService {
         borrowRepository.updateOverdueStatus();
     }
 
-    public List<BorrowView> getAllBorrowedEmployeeIds() {
-        List<BorrowView> borrowAll = borrowRepository.getAllBorrowedEmployeeIds();
-        return borrowAll;
 
+    //เรียกดูประวัติการยืมของ Borrow ทั้งหมด
+    public List<BorrowView> getAllBorrowedEmployeeId() {
+        List<BorrowView> borrowAll = borrowRepository.getAllBorrowedEmployeeId();
+        return borrowAll;
     }
 
-
-    public List<BorrowView> filterBorrowStatus(@Param("statusId") Integer statusId) {
-        List<BorrowView> borrowAll = borrowRepository.filterBorrowStatus(statusId);
+    //ฟิลเตอร์ Status ของ Borrow ออกมาทั้งหมด
+    public List<BorrowView> filterBorrowStatus(@Param("borrowStatusId") Integer borrowStatusId) {
+        List<BorrowView> borrowAll = borrowRepository.filterBorrowStatus(borrowStatusId);
         return borrowAll;
+    }
+
+    //ค้นหาประวัติการยืมอุปกรณ์แต่ละชนิด จาก license_key และ serial_number
+    public List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword) {
+        List<BorrowView> borrowAll = borrowRepository.searchBorrowEquipment(keyword);
+        return borrowRepository.searchBorrowEquipment(keyword);
     }
 
 

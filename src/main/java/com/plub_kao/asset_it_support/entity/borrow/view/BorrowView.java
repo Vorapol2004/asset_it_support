@@ -6,25 +6,51 @@ import java.time.LocalDate;
 public interface BorrowView {
     Integer getId();
 
-
-    String getFirstName();
-
-    String getLastName();
-
     LocalDate getBorrowDate();
 
-    LocalDate getReturnDate();
+    LocalDate returnDate();
 
-    String getEmail();
+    LocalDate dueDate();
+
+    Integer getBorrowStatusId();
 
     String getBorrowStatusName();
 
-    String getEquipmentType();
+    String getReferenceDoc();
 
-    String getEquipmentName();
+    Integer getEmployeeId();
+
+    String getEmployeeName();
+
+    String getEmail();
+
+    String getPhone();
+
+    Integer getDescription();
+
+    String getDepartmentName();
+
+    Integer getRoleId();
+
+    String getRoleName();
+
+    Integer getEquipmentId();
+
+    Integer getEquipmentTypeId();
+
+    String getEquipmentTypeName();
+
+    String getBrand();
+
+    String getModel();
 
     String getSerialNumber();
 
     String getLicenseKey();
+
+    Integer getEquipmentStatusId();
+
+    String getEquipmentStatusName();
+
 
 }

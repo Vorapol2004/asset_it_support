@@ -43,6 +43,9 @@ public class EmployeeController {
     @GetMapping("/dep/{id}")
     public ResponseEntity<List<EmployeeView>> ChooseEmployeeDepartments(@PathVariable Integer id) {
         List<EmployeeView> employee = employeeService.ChooseEmployeeDepartments(id);
+        if (employee.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
