@@ -37,4 +37,14 @@ public class EquipmentService {
     public List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword) {
         return equipmentRepository.searchEquipmentKeyword(keyword);
     }
+
+    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
+    public List<EquipmentView> FilterEquipmentLotType(@Param("equipmentLotTypeId") int equipmentLotTypeId) {
+        return equipmentRepository.FilterEquipmentLotType(equipmentLotTypeId);
+    }
+
+    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
+    public List<EquipmentView> FilterEquipmentLot(@Param("equipmentLotId") int equipmentLotId) {
+        return equipmentRepository.FilterEquipmentLot(equipmentLotId);
+    }
 }

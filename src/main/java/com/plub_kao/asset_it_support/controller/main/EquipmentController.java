@@ -49,5 +49,19 @@ public class EquipmentController {
         return ResponseEntity.ok(equipment);
     }
 
+    //ฟิลเตอร์ lottype ของ equipment ทั้งหมด
+    @GetMapping("/lottype/{id}")
+    public ResponseEntity<List<EquipmentView>> FilterEquipmentLotType(@PathVariable Integer id) {
+        List<EquipmentView> equipment = equipmentService.FilterEquipmentLotType(id);
+        return new ResponseEntity<>(equipment, HttpStatus.OK);
+    }
+
+    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
+    @GetMapping("/lot/{id}")
+    public ResponseEntity<List<EquipmentView>> FilterEquipmentLot(@PathVariable Integer id) {
+        List<EquipmentView> equipment = equipmentService.FilterEquipmentLot(id);
+        return new ResponseEntity<>(equipment, HttpStatus.OK);
+    }
+
 
 }
