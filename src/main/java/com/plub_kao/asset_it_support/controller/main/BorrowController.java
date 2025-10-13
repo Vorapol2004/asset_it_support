@@ -43,8 +43,8 @@ public class BorrowController {
         return borrowService.filterBorrowStatus(statusId);
     }
 
-    @PostMapping("/add")
-    public BorrowResponse NewBorrow(@RequestBody NewBorrow newBorrow) {
-        return borrowService.newBorrow(newBorrow);
-    }
+//    @PostMapping("/add")
+//    public BorrowResponse NewBorrow(@RequestBody NewBorrow newBorrow) {
+//        return borrowService.newBorrow(newBorrow);
+//    }
 }

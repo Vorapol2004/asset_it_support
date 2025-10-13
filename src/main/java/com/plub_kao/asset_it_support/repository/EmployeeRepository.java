@@ -14,36 +14,42 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 
+    //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
     @Query(value = """
                 SELECT
-                    *
+                    e.id AS employee_id,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.email,
+                    e.phone,
+                    e.description,
+            
+                    e.department_id,
+                    d.department_name,
+            
+                    e.role_id,
+                    r.role_name
+            
                 FROM
-                    `employee` e WHERE e.id = :employeeId
-            """, nativeQuery = true)
-    public Employee findByEmployeeId(Integer employeeId);
-
-    //ดึงข้อมูล employee ออกมาทั้งหมด
-    @Query(value = """
-                SELECT
-                    `id`,
-                    `first_name`,
-                    `last_name`,
-                    `email`,
-                    `description`,
-                    `role_id`,
-                    `department_id`
-                FROM
-                    `employee`
+                    employee e
+                LEFT JOIN department d ON
+                    d.id = e.department_id
+                LEFT JOIN role r ON
+                    r.id = e.role_id
             """, nativeQuery = true)
     List<EmployeeView> findAllEmployee();
 
     //ดึงข้อมูล employee เฉพาะ role นั้นๆโดยเฉพาะ
     @Query(value = """
                 SELECT
-                    e.id,
-                	e.first_name,
-                    e.last_name,
+                    e.id AS employee_id,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
                     e.email,
+                    e.phone,
+                    e.description,
+            
+                    e.department_id,
+                    d.department_name,
+            
                     e.role_id,
                     r.role_name
                 FROM
@@ -51,68 +57,79 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                 LEFT JOIN
                 	role r ON r.id = e.role_id
                 WHERE
-                 	r.id = :roleId
+                 	r.id = :EmployeeRoleId
             """, nativeQuery = true)
-    List<EmployeeViewRole> ChooseEmployeeRoles(@Param("roleId") Integer roleId);
+    List<EmployeeView> ChooseEmployeeRoles(@Param("roleId") Integer EmployeeRoleId);
 
 
-    //ดึงข้อมูล emloyee เฉพาะ department นั้นๆโดยเฉพาะ
+    //ดึงข้อมูล employee เฉพาะ department นั้นๆโดยเฉพาะ
     @Query(value = """
                 SELECT
-                	e.id,
-                	e.first_name,
-                    e.last_name,
+                	e.id AS employee_id,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
                     e.email,
+                    e.phone,
+                    e.description,
+            
                     e.department_id,
-                    d.department_name
+                    d.department_name,
+            
+                    e.role_id,
+                    r.role_name
                 FROM
                     `employee` e
                 LEFT JOIN
                 	department d ON d.id = e.department_id
                 WHERE
-                 	d.id = :departmentId
+                 	d.id = :EmployeeDepartmentId
             """, nativeQuery = true)
-    List<EmployeeViewDepartment> ChooseEmployeeDepartments(@Param("departmentId") Integer departmentId);
+    List<EmployeeView> ChooseEmployeeDepartments(@Param("departmentId") Integer EmployeeDepartmentId);
 
 
-    //ดึงข้อมูล emloyee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
+    //ดึงข้อมูลรายชื่อ employee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
     @Query(value = """
                 SELECT
-                    e.id,
-                    e.first_name,
-                    e.last_name,
+                    e.id AS employee_id,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
                     e.email,
+                    e.phone,
+                    e.description,
+            
                     e.department_id,
                     d.department_name,
+            
                     e.role_id,
                     r.role_name
                 FROM
                     `employee` e
-                LEFT JOIN\s
+                LEFT JOIN
                 	department d ON  d.id = e.department_id
                 LEFT JOIN
                     role r ON r.id = e.role_id
                 WHERE
-                    d.id = :descriptionId
-                    AND r.id = :roleId
+                    d.id = :EmployeeDepartmentId
+                    AND r.id = :EmployeeRoleId
             """, nativeQuery = true)
-    List<EmployeeViewDepAndRole> ChooseEmployeeDepartmentAndRole(
-            @Param("descriptionId") Integer descriptionId,
-            @Param("roleId") Integer roleId);
+    List<EmployeeView> ChooseEmployeeDepartmentAndRole(
+            @Param("descriptionId") Integer EmployeeDepartmentId,
+            @Param("roleId") Integer EmployeeRoleId);
 
 
     //ค้นหาชื่อ employee ด้วย keyword
     @Query(value = """
             
                     SELECT
-                        e.id,
-                        e.first_name,
-                        e.last_name,
-                        e.email,
-                        e.department_id,
-                        d.department_name,
-                        e.role_id,
-                        r.role_name
+                    e.id AS employee_id,
+                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.email,
+                    e.phone,
+                    e.description,
+            
+                    e.department_id,
+                    d.department_name,
+            
+                    e.role_id,
+                    r.role_name
                     FROM
                         employee e
                     LEFT JOIN
@@ -127,11 +144,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
                         )
             """, nativeQuery = true)
-    //List<EmployeeViewDepAndRole> findChooseDepAndRole(@Param("departmentId") Integer departmentId,
-    //  @Param("roleId") Integer roleId);
-
-
-    List<EmployeeViewDepAndRole> findEmployeeByDepRoleAndKeyword(
+    List<EmployeeView> searchEmployeeKeyword(
             @Param("keyword") String keyword);
 
 

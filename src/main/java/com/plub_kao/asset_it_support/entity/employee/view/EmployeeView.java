@@ -4,11 +4,13 @@ public interface EmployeeView {
 
     Integer getId();
 
-    String getFirstName();
-
-    String getLastName();
+    String getEmployeeName();
 
     String getEmail();
+
+    String getPhone();
+
+    String getDescription();
 
     Integer getDepartmentId();
 
