@@ -2,9 +2,6 @@ package com.plub_kao.asset_it_support.repository;
 
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeViewDepAndRole;
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeViewDepartment;
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeViewRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -17,20 +17,23 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
+
+    //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
     public List<EquipmentView> findAllEquipment() {
         return equipmentRepository.findAllEquipment();
     }
 
-
-    public List<EquipmentView> ChooseEquipmentType(@Param("equipmentTypeId") int equipmentTypeId) {
-        return equipmentRepository.ChooseEquipmentType(equipmentTypeId);
+    //ฟิลเตอร์ Type ของ equipment ทั้งหมด
+    public List<EquipmentView> FilterEquipmentType(@Param("equipmentTypeId") int equipmentTypeId) {
+        return equipmentRepository.FilterEquipmentType(equipmentTypeId);
     }
 
-    public List<EquipmentView> ChooseEquipmentStatus(@Param("equipmentStatusId") int equipmentStatusId) {
-        return equipmentRepository.ChooseEquipmentStatus(equipmentStatusId);
+    //ฟิลเตอร์ Status ของ equipment ทั้งหมด
+    public List<EquipmentView> FilterEquipmentStatus(@Param("equipmentStatusId") int equipmentStatusId) {
+        return equipmentRepository.FilterEquipmentStatus(equipmentStatusId);
     }
 
-
+    //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
     public List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword) {
         return equipmentRepository.searchEquipmentKeyword(keyword);
     }

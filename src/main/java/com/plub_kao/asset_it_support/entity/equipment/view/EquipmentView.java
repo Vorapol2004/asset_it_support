@@ -1,8 +1,14 @@
 package com.plub_kao.asset_it_support.entity.equipment.view;
 
+import java.time.LocalDate;
+
 public interface EquipmentView {
 
     Integer getId();
+
+    Integer getEquipmentTypeId();
+
+    String getEquipmentTypeName();
 
     String getEquipmentName();
 
@@ -12,15 +18,28 @@ public interface EquipmentView {
 
     String getSerialNumber();
 
-    Integer getEquipmentTypeId();
-
-    String getEquipmentTypeName();
+    String getLicenseKey();
 
     Integer getEquipmentStatusId();
 
     String getEquipmentStatusName();
 
-    String getLicenseKey();
+    Integer getLotId();
 
+    String getLotName();
+
+    String getAcademicYear();
+
+    String getReferenceDoc();
+
+    String getDescription();
+
+    LocalDate getPurchaseDate();
+
+    LocalDate getExpireDate();
+
+    Integer getLotTypeId();
+
+    String getLotTypeName();
 
 }
