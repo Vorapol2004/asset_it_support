@@ -28,19 +28,6 @@ public class EquipmentController {
         return ResponseEntity.ok(equipmentService.findAllEquipment());
     }
 
-    //ฟิลเตอร์ Type ของ equipment ทั้งหมด
-    @GetMapping("/Type/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentType(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentType(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-    }
-
-    //ฟิลเตอร์ Status ของ equipment ทั้งหมด
-    @GetMapping("/Status/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentStatus(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentStatus(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-    }
 
     //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
     @GetMapping("/search")
@@ -63,5 +50,15 @@ public class EquipmentController {
         return new ResponseEntity<>(equipment, HttpStatus.OK);
     }
 
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<EquipmentView>> filter(
+            @RequestParam(required = false) Integer equipmentTypeId,
+            @RequestParam(required = false) Integer equipmentStatusId
+    ) {
+        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentTypeId, equipmentStatusId);
+        return new ResponseEntity<>(equipment, HttpStatus.OK);
+
+    }
 
 }

@@ -1,17 +1,22 @@
 package com.plub_kao.asset_it_support.entity.room;
 
-import com.plub_kao.asset_it_support.entity.Department;
+import com.plub_kao.asset_it_support.entity.DepartmentRoom;
 import com.plub_kao.asset_it_support.entity.Floor;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "room")
 public class Room {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -22,8 +27,6 @@ public class Room {
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
-
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<DepartmentRoom> departmentRooms;
 }

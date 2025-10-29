@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -18,6 +20,9 @@ public class Building {
 
     @Column(name = "building_name", nullable = false, length = 50)
     private String buildingName;
+
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
+    private List<Floor> floors;
 
     public Building(String buildingName) {
         this.buildingName = buildingName;

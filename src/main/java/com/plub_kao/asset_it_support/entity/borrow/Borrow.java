@@ -28,6 +28,7 @@ public class Borrow {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Employee employee;
 
+
     @Column(name = "borrow_date", nullable = false)
     private LocalDate borrowDate;
 
@@ -41,10 +42,5 @@ public class Borrow {
     @JoinColumn(name = "borrow_status_id", nullable = false)
     private BorrowStatus borrowStatus;
 
-    public Borrow(Employee employee, BorrowStatus borrowStatus, LocalDate borrowDate, String referenceDoc) {
-        this.employee = employee;
-        this.borrowStatus = borrowStatus;
-        this.borrowDate = borrowDate;
-        this.referenceDoc = referenceDoc;
-    }
+
 }

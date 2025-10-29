@@ -1,6 +1,5 @@
 package com.plub_kao.asset_it_support.service;
 
-import com.plub_kao.asset_it_support.entity.BorrowEquipmentStatus;
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
@@ -31,13 +30,13 @@ public class BorrowService {
     @Autowired
     private EquipmentRepository equipmentRepository;
     @Autowired
-    private BorrowEquipmentStatusRepository borrowEquipmentStatusRepository;
-    @Autowired
     private BorrowStatusRepository borrowStatusRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private BorrowEquipmentRepository borrowEquipmentRepository;
+    @Autowired
+    private EmployeeService employeeService;
 
 
     @Transactional
@@ -59,14 +58,13 @@ public class BorrowService {
         return borrowAll;
     }
 
-    //ค้นหาประวัติการยืมอุปกรณ์แต่ละชนิด จาก license_key และ serial_number
+    //license_key และ serial_number
     public List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword) {
         List<BorrowView> borrowAll = borrowRepository.searchBorrowEquipment(keyword);
         return borrowRepository.searchBorrowEquipment(keyword);
     }
 
 
-//    //เพิ่มธุรกรรมการยืม
 //    public BorrowResponse newBorrow(NewBorrow newBorrow) {
 //
 //

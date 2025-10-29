@@ -1,29 +1,27 @@
 package com.plub_kao.asset_it_support.entity;
 
+import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.room.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Entity
-@Table(name = "floor")
-public class Floor {
+@Table(name = "department_room")
+public class DepartmentRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "floor_name", nullable = false, length = 50)
-    private String floorName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "building_id", nullable = false)
-    private Building building;
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
-    @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL)
-    private List<Room> rooms;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
 }

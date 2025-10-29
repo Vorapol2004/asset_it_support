@@ -1,7 +1,7 @@
 package com.plub_kao.asset_it_support.entity.employee;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.plub_kao.asset_it_support.entity.Department;
+import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,5 +40,6 @@ public class Employee {
 
     @Column(name = "phone", nullable = false, length = 10)
     private String phone;
+
 
 }

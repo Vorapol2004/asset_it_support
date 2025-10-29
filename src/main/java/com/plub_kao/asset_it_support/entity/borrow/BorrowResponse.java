@@ -14,4 +14,6 @@ public class BorrowResponse {
     private String referenceDoc;
     private LocalDate borrowDate;
     private String statusName;
+
+    
 }

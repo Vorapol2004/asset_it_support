@@ -1,8 +1,14 @@
 package com.plub_kao.asset_it_support.service;
 
 
+import com.plub_kao.asset_it_support.entity.department.Department;
+import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.entity.employee.Employee;
+import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
+import com.plub_kao.asset_it_support.repository.DepartmentRepository;
 import com.plub_kao.asset_it_support.repository.EmployeeRepository;
+import com.plub_kao.asset_it_support.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -14,6 +20,36 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+
+
+    //add newEmployee
+    public Employee addNewEmployee(EmployeeRequest request) {
+
+        Employee employee = new Employee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhone(request.getPhone());
+        employee.setDescription(request.getDescription());
+
+        Department department = departmentRepository.findById(request.getDepartmentId())
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+        employee.setDepartment(department);
+
+        if (request.getRoleId() != null) {
+            Role role = roleRepository.findById(request.getRoleId())
+                    .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+            employee.setRole(role);
+        }
+
+        return employeeRepository.save(employee);
+
+
+    }
 
 
     //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด

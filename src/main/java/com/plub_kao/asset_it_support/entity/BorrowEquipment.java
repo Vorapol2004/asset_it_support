@@ -35,14 +35,4 @@ public class BorrowEquipment {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "borrow_equipment_status_id", nullable = false)
-//    private BorrowEquipmentStatus borrowEquipmentStatus;
-
-//    public BorrowEquipment(Borrow borrow, Equipment equipment, BorrowEquipmentStatus borrowEquipmentStatus, LocalDate dueDate) {
-//        this.borrow = borrow;
-//        this.equipment = equipment;
-//        this.borrowEquipmentStatus = borrowEquipmentStatus;
-//        this.dueDate = dueDate;
-//    }
 }

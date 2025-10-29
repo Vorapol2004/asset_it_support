@@ -128,6 +128,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             	r.id = e.role_id
             WHERE
                 bs.id = :borrowStatusId
+                AND r.id = :roleId
+                AND 
             
             """, nativeQuery = true)
     List<BorrowView> filterBorrowStatus(@Param("borrowStatusId") Integer borrowStatusId);

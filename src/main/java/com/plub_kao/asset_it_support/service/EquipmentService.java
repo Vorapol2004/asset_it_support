@@ -1,7 +1,6 @@
 package com.plub_kao.asset_it_support.service;
 
 
-import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +22,20 @@ public class EquipmentService {
         return equipmentRepository.findAllEquipment();
     }
 
-    //ฟิลเตอร์ Type ของ equipment ทั้งหมด
-    public List<EquipmentView> FilterEquipmentType(@Param("equipmentTypeId") int equipmentTypeId) {
-        return equipmentRepository.FilterEquipmentType(equipmentTypeId);
+    //ฟิลเตอร์ Status และ Type ของ equipment ทั้งหมด
+    public List<EquipmentView> filterStatusAndType(Integer equipmentStatusId, Integer equipmentTypeId) {
+        if (equipmentStatusId != null && equipmentTypeId == null) {
+            return equipmentRepository.FilterEquipmentStatus(equipmentStatusId);
+        }
+        if (equipmentStatusId == null && equipmentTypeId != null) {
+            return equipmentRepository.FilterEquipmentType(equipmentTypeId);
+        }
+        if (equipmentStatusId != null && equipmentTypeId != null) {
+            return equipmentRepository.FilterEquipmentStatusAndType(equipmentStatusId, equipmentTypeId);
+        }
+        return findAllEquipment();
     }
 
-    //ฟิลเตอร์ Status ของ equipment ทั้งหมด
-    public List<EquipmentView> FilterEquipmentStatus(@Param("equipmentStatusId") int equipmentStatusId) {
-        return equipmentRepository.FilterEquipmentStatus(equipmentStatusId);
-    }
 
     //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
     public List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword) {
