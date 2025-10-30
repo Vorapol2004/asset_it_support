@@ -176,8 +176,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
             WHERE
-               (:equipmentStatusId IS NULL OR es.id = :equipmentStatusId)
-                AND (:equipmentTypeId IS NULL OR et.id = :equipmentTypeId)
+               (:equipmentStatusId IS NULL OR e.equipment_status_id = :equipmentStatusId)
+                     AND (:equipmentTypeId IS NULL OR e.equipment_type_id = :equipmentTypeId)
             """, nativeQuery = true)
     List<EquipmentView> findByDynamicFilter(@Param("equipmentStatusId") int equipmentStatusId,
                                             @Param("equipmentTypeId") int equipmentTypeId);
