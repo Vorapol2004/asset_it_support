@@ -48,6 +48,13 @@ public class EquipmentController {
     public ResponseEntity<List<EquipmentView>> FilterEquipmentLot(@PathVariable Integer id) {
         List<EquipmentView> equipment = equipmentService.FilterEquipmentLot(id);
         return new ResponseEntity<>(equipment, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/select/{id}")
+    public ResponseEntity<List<EquipmentView>> FilterEquipmentSelect(@PathVariable Integer id) {
+        List<EquipmentView> equipment = equipmentService.SelectEquipment(id);
+        return new ResponseEntity<>(equipment, HttpStatus.OK);
     }
 
 

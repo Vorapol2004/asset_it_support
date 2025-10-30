@@ -21,8 +21,6 @@ public class DepartmentController {
     @PostMapping("/add")
     private Department saveDepartment(@RequestBody Department department) {
         return departmentRepository.save(department);
-
-
     }
 
 

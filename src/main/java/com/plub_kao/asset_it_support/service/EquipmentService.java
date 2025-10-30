@@ -22,6 +22,11 @@ public class EquipmentService {
         return equipmentRepository.findAllEquipment();
     }
 
+
+    public List<EquipmentView> SelectEquipment(@Param("equipmentStatusId") int equipmentStatusId) {
+        return equipmentRepository.selectEquipmentById(equipmentStatusId);
+    }
+
     //ฟิลเตอร์ Status และ Type ของ equipment ทั้งหมด
     public List<EquipmentView> filterStatusAndType(Integer equipmentStatusId, Integer equipmentTypeId) {
         if (equipmentStatusId != null && equipmentTypeId == null) {
