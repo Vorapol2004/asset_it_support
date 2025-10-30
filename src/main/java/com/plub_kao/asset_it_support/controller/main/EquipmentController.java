@@ -53,12 +53,11 @@ public class EquipmentController {
 
     @GetMapping("/filter")
     public ResponseEntity<List<EquipmentView>> filter(
-            @RequestParam(required = false) Integer equipmentTypeId,
-            @RequestParam(required = false) Integer equipmentStatusId
+            @RequestParam(required = false) Integer equipmentStatus,
+            @RequestParam(required = false) Integer equipmentType
     ) {
-        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentTypeId, equipmentStatusId);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-
+        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatus, equipmentType);
+        return ResponseEntity.ok(equipment);
     }
 
 }

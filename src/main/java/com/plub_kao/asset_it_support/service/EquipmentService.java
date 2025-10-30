@@ -24,16 +24,7 @@ public class EquipmentService {
 
     //ฟิลเตอร์ Status และ Type ของ equipment ทั้งหมด
     public List<EquipmentView> filterStatusAndType(Integer equipmentStatusId, Integer equipmentTypeId) {
-        if (equipmentStatusId != null && equipmentTypeId == null) {
-            return equipmentRepository.FilterEquipmentStatus(equipmentStatusId);
-        }
-        if (equipmentStatusId == null && equipmentTypeId != null) {
-            return equipmentRepository.FilterEquipmentType(equipmentTypeId);
-        }
-        if (equipmentStatusId != null && equipmentTypeId != null) {
-            return equipmentRepository.FilterEquipmentStatusAndType(equipmentStatusId, equipmentTypeId);
-        }
-        return findAllEquipment();
+        return equipmentRepository.findByDynamicFilter(equipmentStatusId, equipmentTypeId);
     }
 
 
