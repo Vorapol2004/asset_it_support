@@ -1,6 +1,7 @@
 package com.plub_kao.asset_it_support.service;
 
 
+import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class EquipmentService {
 
     @Autowired
     private EquipmentRepository equipmentRepository;
+
+    @Autowired
+    private LotService lotService;
 
 
     //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
@@ -35,6 +39,8 @@ public class EquipmentService {
         }
         return equipmentRepository.findAllEquipment();
     }
+
+    //ฟิลเตอร์ add
 
 
     //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
