@@ -2,13 +2,10 @@ package com.plub_kao.asset_it_support.entity.equipment;
 
 import com.plub_kao.asset_it_support.entity.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.EquipmentType;
-import com.plub_kao.asset_it_support.entity.Lot;
+import com.plub_kao.asset_it_support.entity.lot.Lot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
 
 @Getter
 @Setter

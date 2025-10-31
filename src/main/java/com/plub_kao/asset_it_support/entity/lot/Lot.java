@@ -1,10 +1,12 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.lot;
 
+import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,10 +18,6 @@ public class Lot {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id", nullable = false)
-    private LotType lotType;
 
     @Column(name = "lot_name", nullable = false, length = 100)
     private String lotName;
@@ -39,8 +37,10 @@ public class Lot {
     @Column(name = "expire_date")
     private LocalDate expireDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lot_type_id", nullable = false)
-    private LotType lotType1;
+    private LotType lotType;
 
+    @OneToMany(mappedBy = "lot", cascade = CascadeType.ALL)
+    private List<Equipment> equipmentList;
 }
