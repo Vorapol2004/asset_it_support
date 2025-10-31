@@ -43,7 +43,6 @@ public class LotService {
                 if (eq.getEquipmentName() == null || eq.getEquipmentName().isBlank()) {
                     eq.setEquipmentName(eq.getBrand() + " " + eq.getModel());
                 }
-
                 eq.setLot(savedLot);
                 equipmentRepository.save(eq);
             }
