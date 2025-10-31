@@ -56,13 +56,15 @@ public class EquipmentController {
         List<EquipmentView> equipment = equipmentService.SelectEquipment(id);
         return new ResponseEntity<>(equipment, HttpStatus.OK);
     }
-    
+
+
     @GetMapping("/filter")
     public ResponseEntity<List<EquipmentView>> filter(
-            @RequestParam(required = false) Integer equipmentStatus,
-            @RequestParam(required = false) Integer equipmentType
+            @RequestParam(required = false) Integer equipmentStatusId,
+            @RequestParam(required = false) Integer equipmentTypeId
     ) {
-        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatus, equipmentType);
+        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatusId, equipmentTypeId);
         return ResponseEntity.ok(equipment);
     }
+
 }

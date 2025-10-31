@@ -26,7 +26,6 @@ public class EquipmentService {
         return equipmentRepository.findAllEquipment();
     }
 
-
     public List<EquipmentView> SelectEquipment(@Param("equipmentStatusId") int equipmentStatusId) {
         return equipmentRepository.selectEquipmentById(equipmentStatusId);
     }
