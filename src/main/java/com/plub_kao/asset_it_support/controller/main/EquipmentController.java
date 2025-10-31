@@ -1,7 +1,12 @@
 package com.plub_kao.asset_it_support.controller.main;
 
 
+import com.plub_kao.asset_it_support.entity.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.EquipmentType;
+import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentTypeView;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
+import com.plub_kao.asset_it_support.repository.EquipmentStatusRepository;
+import com.plub_kao.asset_it_support.repository.EquipmentTypeRepository;
 import com.plub_kao.asset_it_support.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,11 @@ public class EquipmentController {
 
     @Autowired
     private EquipmentService equipmentService;
+    @Autowired
+    private EquipmentStatusRepository equipmentStatusRepository;
+
+    @Autowired
+    private EquipmentTypeRepository equipmentTypeRepository;
 
 
     //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
@@ -26,6 +36,16 @@ public class EquipmentController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(equipmentService.findAllEquipment());
+    }
+
+    @GetMapping("/status/dropdown")
+    public List<EquipmentStatus> getAllStatuses() {
+        return equipmentStatusRepository.findAll();
+    }
+
+    @GetMapping("/type/dropdown")
+    public List<EquipmentType> getAllTypeStatuses() {
+        return equipmentTypeRepository.findAll();
     }
 
 
@@ -56,7 +76,7 @@ public class EquipmentController {
         List<EquipmentView> equipment = equipmentService.SelectEquipment(id);
         return new ResponseEntity<>(equipment, HttpStatus.OK);
     }
-    
+
     @GetMapping("/filter")
     public ResponseEntity<List<EquipmentView>> filter(
             @RequestParam(required = false) Integer equipmentStatus,

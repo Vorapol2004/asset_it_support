@@ -6,8 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BorrowStatusRepository extends JpaRepository<BorrowStatus, Integer> {
 
-    @Query(value = """
-                    SELECT * FROM `borrow_status` b WHERE b.id = :statusId 
-            """, nativeQuery = true)
-    public BorrowStatus findByStatusId(Integer statusId);
+
 }

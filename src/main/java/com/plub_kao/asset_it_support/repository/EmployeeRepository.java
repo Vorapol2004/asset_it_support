@@ -35,6 +35,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             """, nativeQuery = true)
     List<EmployeeView> findAllEmployee();
 
+
     //ดึงข้อมูล employee เฉพาะ role นั้นๆโดยเฉพาะ
     @Query(value = """
                 SELECT
