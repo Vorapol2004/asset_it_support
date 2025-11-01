@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BorrowStatusRepository extends JpaRepository<BorrowStatus, Integer> {
 
-
 }

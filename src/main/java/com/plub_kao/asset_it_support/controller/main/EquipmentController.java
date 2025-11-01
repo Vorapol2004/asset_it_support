@@ -91,4 +91,25 @@ public class EquipmentController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEquipment(@PathVariable Integer id) {
+        try {
+            boolean deleted = equipmentService.deleteEquipment(id);
+            if (deleted) {
+                return ResponseEntity.ok("ลบอุปกรณ์เรียบร้อยแล้ว");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("ไม่พบอุปกรณ์ที่ต้องการลบ");
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("เกิดข้อผิดพลาดภายในระบบ");
+        }
+    }
+
+
 }
