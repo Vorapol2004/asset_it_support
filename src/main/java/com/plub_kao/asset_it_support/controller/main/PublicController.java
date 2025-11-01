@@ -4,8 +4,8 @@ package com.plub_kao.asset_it_support.controller.main;
 import com.plub_kao.asset_it_support.entity.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.EquipmentType;
 import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.repository.EquipmentStatusRepository;
 import com.plub_kao.asset_it_support.repository.EquipmentTypeRepository;
-import com.plub_kao.asset_it_support.repository.EquipmenyStatusRepository;
 import com.plub_kao.asset_it_support.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class PublicController {
     }
 
     @Autowired
-    private EquipmenyStatusRepository equipmenyStatusRepository;
+    private EquipmentStatusRepository equipmenyStatusRepository;
 
     @GetMapping ("/e_status")
     public List<EquipmentStatus> getAllEquipmentStatus() {

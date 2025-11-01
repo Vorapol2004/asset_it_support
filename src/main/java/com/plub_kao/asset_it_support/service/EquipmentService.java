@@ -3,7 +3,9 @@ package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
+import com.plub_kao.asset_it_support.repository.BorrowEquipmentRepository;
 import com.plub_kao.asset_it_support.repository.EquipmentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -61,4 +63,28 @@ public class EquipmentService {
     public List<EquipmentView> FilterEquipmentLot(@Param("equipmentLotId") int equipmentLotId) {
         return equipmentRepository.FilterEquipmentLot(equipmentLotId);
     }
+
+    @Autowired
+    private BorrowEquipmentRepository borrowEquipmentRepository; // เพิ่มบรรทัดนี้
+
+    @Transactional
+    public boolean deleteEquipment(Integer id) {
+        // ตรวจว่ามีอยู่ไหม
+        if (!equipmentRepository.existsById(id)) {
+            return false;
+        }
+
+        // ตรวจว่ามีการอ้างอิงใน borrow_equipment ไหม
+        int borrowCount = borrowEquipmentRepository.countByEquipmentId(id);
+        if (borrowCount > 0) {
+            throw new RuntimeException("ไม่สามารถลบอุปกรณ์ได้ เนื่องจากอุปกรณ์นี้เคยถูกยืมหรือมีประวัติการใช้งาน");
+        }
+
+        // ถ้าไม่เคยถูกยืม → ลบได้เลย
+        equipmentRepository.deleteById(id);
+        return true;
+    }
+
+
+
 }

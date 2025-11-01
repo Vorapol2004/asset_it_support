@@ -36,20 +36,20 @@ public class EquipmentController {
         return ResponseEntity.ok(equipment);
     }
 
-    //ฟิลเตอร์ lottype ของ equipment ทั้งหมด
-    @GetMapping("/lottype/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentLotType(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentLotType(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-    }
-
-    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
-    @GetMapping("/lot/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentLot(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentLot(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-
-    }
+//    //ฟิลเตอร์ lottype ของ equipment ทั้งหมด
+//    @GetMapping("/lottype/{id}")
+//    public ResponseEntity<List<EquipmentView>> FilterEquipmentLotType(@PathVariable Integer id) {
+//        List<EquipmentView> equipment = equipmentService.FilterEquipmentLotType(id);
+//        return new ResponseEntity<>(equipment, HttpStatus.OK);
+//    }
+//
+//    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
+//    @GetMapping("/lot/{id}")
+//    public ResponseEntity<List<EquipmentView>> FilterEquipmentLot(@PathVariable Integer id) {
+//        List<EquipmentView> equipment = equipmentService.FilterEquipmentLot(id);
+//        return new ResponseEntity<>(equipment, HttpStatus.OK);
+//
+//    }
 
     @GetMapping("/select/{id}")
     public ResponseEntity<List<EquipmentView>> FilterEquipmentSelect(@PathVariable Integer id) {
@@ -66,5 +66,23 @@ public class EquipmentController {
         List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatusId, equipmentTypeId);
         return ResponseEntity.ok(equipment);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEquipment(@PathVariable Integer id) {
+        try {
+            boolean deleted = equipmentService.deleteEquipment(id);
+            if (deleted) {
+                return ResponseEntity.ok("ลบอุปกรณ์สำเร็จ");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("ไม่พบอุปกรณ์ที่ต้องการลบ");
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+    /**
+     * ลบอุปกรณ์เฉพาะอุปกรณ์ที่ไม่ได้มีประวัติการยืมหรือไม่ได้ยืมอยู่
+     * **/
 
 }
