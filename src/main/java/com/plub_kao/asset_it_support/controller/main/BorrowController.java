@@ -115,6 +115,20 @@ public class BorrowController {
         return ResponseEntity.ok(borrowALll);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<BorrowResponse> createBorrow(@RequestBody NewBorrow request) {
+        try {
+            BorrowResponse response = borrowService.createBorrow(request);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            // ถ้ามี error เช่น อุปกรณ์ไม่พร้อม หรือไม่พบผู้ยืม
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // error อื่น ๆ
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 //    @PostMapping("/add")
 //    public BorrowResponse NewBorrow(@RequestBody NewBorrow newBorrow) {
 //        return borrowService.newBorrow(newBorrow);

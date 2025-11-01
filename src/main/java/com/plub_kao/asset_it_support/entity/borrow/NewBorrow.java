@@ -15,10 +15,17 @@ import java.util.List;
 public class NewBorrow {
 
 
-    private Integer employee;
-    private LocalDate borrowDate;
+    private Integer employeeId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phone;
+    private String description;
     private String referenceDoc;
+    private LocalDate borrowDate;
     private LocalDate dueDate;
+    private Integer departmentId;
+    private Integer roleId;
     private List<Integer> equipmentId;
 
 }
