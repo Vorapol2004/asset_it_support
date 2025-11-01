@@ -5,12 +5,15 @@ import com.plub_kao.asset_it_support.entity.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
+import com.plub_kao.asset_it_support.entity.department.View.BuildingView;
+import com.plub_kao.asset_it_support.entity.department.View.RoomView;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.BorrowRepository;
 import com.plub_kao.asset_it_support.repository.EmployeeRepository;
 import com.plub_kao.asset_it_support.service.BorrowService;
+import com.plub_kao.asset_it_support.service.DepartmentRoomService;
 import com.plub_kao.asset_it_support.service.EmployeeService;
 import com.plub_kao.asset_it_support.service.EquipmentService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,8 @@ public class BorrowController {
     private EmployeeService employeeService;
     @Autowired
     private EquipmentService equipmentService;
+    @Autowired
+    private DepartmentRoomService departmentRoomService;
 
 
     @GetMapping("/update-overdue")
@@ -58,6 +63,23 @@ public class BorrowController {
     @GetMapping("/equipmentBorrow/dropDown")
     public List<EquipmentView> getAllEquipmentBorrowedById() {
         return equipmentService.selectEquipmentBorrowedById();
+    }
+
+
+    @GetMapping("/buildings/{departmentId}")
+    public ResponseEntity<List<BuildingView>> getBuildings(@PathVariable Integer departmentId) {
+        List<BuildingView> buildings = departmentRoomService.getBuildingsByDepartment(departmentId);
+        return ResponseEntity.ok(buildings);
+    }
+
+
+    @GetMapping("/rooms")
+    public ResponseEntity<List<RoomView>> getRooms(
+            @RequestParam Integer departmentId,
+            @RequestParam Integer buildingId
+    ) {
+        List<RoomView> rooms = departmentRoomService.getRoomsByDepartmentAndBuilding(departmentId, buildingId);
+        return ResponseEntity.ok(rooms);
     }
 
 

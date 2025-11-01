@@ -6,13 +6,11 @@ import com.plub_kao.asset_it_support.entity.EquipmentType;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.lot.LotType;
-import com.plub_kao.asset_it_support.repository.EquipmentRepository;
-import com.plub_kao.asset_it_support.repository.EquipmentStatusRepository;
-import com.plub_kao.asset_it_support.repository.EquipmentTypeRepository;
-import com.plub_kao.asset_it_support.repository.LotTypeRepository;
+import com.plub_kao.asset_it_support.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class EquipmentService {
     private LotTypeRepository lotTypeRepository;
 
     @Autowired
-    private LotService lotService;
+    private BorrowEquipmentRepository borrowEquipmentRepository;
 
 
     public List<EquipmentView> findAllEquipment() {
@@ -92,5 +90,21 @@ public class EquipmentService {
     //ฟิลเตอร์ lot ของ equipment ทั้งหมด
     public List<EquipmentView> FilterEquipmentLot(@Param("equipmentLotId") int equipmentLotId) {
         return equipmentRepository.FilterEquipmentLot(equipmentLotId);
+    }
+
+    @Transactional
+    public boolean deleteEquipment(Integer id) {
+        // ตรวจว่ามีอยู่ไหม
+        if (!equipmentRepository.existsById(id)) {
+            return false;
+        }
+        // ตรวจว่ามีการอ้างอิงใน borrow_equipment ไหม
+        int borrowCount = borrowEquipmentRepository.countByEquipmentId(id);
+        if (borrowCount > 0) {
+            throw new RuntimeException("ไม่สามารถลบอุปกรณ์ได้ เนื่องจากอุปกรณ์นี้เคยถูกยืมหรือมีประวัติการใช้งาน");
+        }
+        // ถ้าไม่เคยถูกยืม → ลบได้เลย
+        equipmentRepository.deleteById(id);
+        return true;
     }
 }
