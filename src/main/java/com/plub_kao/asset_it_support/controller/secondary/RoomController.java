@@ -1,7 +1,6 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
 
-import com.plub_kao.asset_it_support.entity.room.Room;
 import com.plub_kao.asset_it_support.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +14,6 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
-
-
-    @PutMapping("/room/{roomId}/move/{floorId}")
-    public Room moveRoom(@PathVariable Integer roomId, @PathVariable Integer floorId) {
-        return roomService.moveRoomToFloor(roomId, floorId);
-    }
 
 
 }

@@ -24,9 +24,4 @@ public class DepartmentController {
     }
 
 
-    @PostMapping("/test")
-    public String addDepartmentLocation(@RequestBody DepartmentLocationRequest request) {
-        return departmentService.addDepartmentLocation(request);
-    }
-
 }

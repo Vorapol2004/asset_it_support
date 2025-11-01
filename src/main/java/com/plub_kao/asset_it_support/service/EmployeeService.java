@@ -58,6 +58,10 @@ public class EmployeeService {
         return employees;
     }
 
+    public List<Role> findAllRole() {
+        return roleRepository.findAll();
+    }
+
 
     //ดึงข้อมูลรายชื่อ employee เฉพาะ role นั้นโดยเฉพาะออกมาทั้งหมด
     public List<EmployeeView> ChooseEmployeeRoles(@Param("EmployeeRoleId") Integer EmployeeRoleId) {

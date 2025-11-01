@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.entity.lot;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Lot {
     @JoinColumn(name = "lot_type_id", nullable = false)
     private LotType lotType;
 
-    @OneToMany(mappedBy = "lot", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lot", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Equipment> equipmentList;
 }

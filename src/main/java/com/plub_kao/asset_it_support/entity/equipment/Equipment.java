@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.entity.equipment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.plub_kao.asset_it_support.entity.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.EquipmentType;
 import com.plub_kao.asset_it_support.entity.lot.Lot;
@@ -39,6 +40,7 @@ public class Equipment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "lot_id", nullable = false)
+    @JsonBackReference
     private Lot lot;
 
     @Column(name = "license_key")

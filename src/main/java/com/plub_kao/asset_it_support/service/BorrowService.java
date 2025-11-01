@@ -1,6 +1,7 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
+import com.plub_kao.asset_it_support.entity.Role;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
@@ -51,6 +52,7 @@ public class BorrowService {
         List<BorrowView> borrowAll = borrowRepository.getAllBorrowedEmployeeId();
         return borrowAll;
     }
+
 
     //ฟิลเตอร์ Status ของ Borrow ออกมาทั้งหมด
     public List<BorrowView> filterBorrowStatus(@Param("borrowStatusId") Integer borrowStatusId) {

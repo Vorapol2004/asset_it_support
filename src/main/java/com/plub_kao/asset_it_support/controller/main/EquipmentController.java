@@ -3,11 +3,16 @@ package com.plub_kao.asset_it_support.controller.main;
 
 import com.plub_kao.asset_it_support.entity.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.EquipmentType;
-import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentTypeView;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
+import com.plub_kao.asset_it_support.entity.lot.Lot;
+import com.plub_kao.asset_it_support.entity.lot.LotRequest;
+import com.plub_kao.asset_it_support.entity.lot.LotType;
 import com.plub_kao.asset_it_support.repository.EquipmentStatusRepository;
 import com.plub_kao.asset_it_support.repository.EquipmentTypeRepository;
+import com.plub_kao.asset_it_support.repository.LotRepository;
+import com.plub_kao.asset_it_support.repository.LotTypeRepository;
 import com.plub_kao.asset_it_support.service.EquipmentService;
+import com.plub_kao.asset_it_support.service.LotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +27,9 @@ public class EquipmentController {
 
     @Autowired
     private EquipmentService equipmentService;
-    @Autowired
-    private EquipmentStatusRepository equipmentStatusRepository;
 
     @Autowired
-    private EquipmentTypeRepository equipmentTypeRepository;
+    private LotService lotService;
 
 
     //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
@@ -38,14 +41,20 @@ public class EquipmentController {
         return ResponseEntity.ok(equipmentService.findAllEquipment());
     }
 
-    @GetMapping("/status/dropdown")
+    @GetMapping("/equipmentStatus/dropDown")
     public List<EquipmentStatus> getAllStatuses() {
-        return equipmentStatusRepository.findAll();
+        return equipmentService.findAllEquipmentStatus();
     }
 
-    @GetMapping("/type/dropdown")
+
+    @GetMapping("/equipmentType/dropDown")
     public List<EquipmentType> getAllTypeStatuses() {
-        return equipmentTypeRepository.findAll();
+        return equipmentService.findAllEquipmentType();
+    }
+
+    @GetMapping("/lotType/dropDown")
+    public List<LotType> getAllLotTypeStatuses() {
+        return equipmentService.findAllLotType();
     }
 
 
@@ -56,20 +65,6 @@ public class EquipmentController {
         return ResponseEntity.ok(equipment);
     }
 
-    //ฟิลเตอร์ lottype ของ equipment ทั้งหมด
-    @GetMapping("/lottype/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentLotType(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentLotType(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-    }
-
-    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
-    @GetMapping("/lot/{id}")
-    public ResponseEntity<List<EquipmentView>> FilterEquipmentLot(@PathVariable Integer id) {
-        List<EquipmentView> equipment = equipmentService.FilterEquipmentLot(id);
-        return new ResponseEntity<>(equipment, HttpStatus.OK);
-
-    }
 
     @GetMapping("/select/{id}")
     public ResponseEntity<List<EquipmentView>> FilterEquipmentSelect(@PathVariable Integer id) {
@@ -84,5 +79,16 @@ public class EquipmentController {
     ) {
         List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatus, equipmentType);
         return ResponseEntity.ok(equipment);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Lot> addLot(@RequestBody LotRequest request) {
+        try {
+            Lot savedLot = lotService.addLot(request);
+            return new ResponseEntity<>(savedLot, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

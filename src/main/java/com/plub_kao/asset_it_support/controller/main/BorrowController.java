@@ -1,11 +1,18 @@
 package com.plub_kao.asset_it_support.controller.main;
 
+import com.plub_kao.asset_it_support.entity.EquipmentType;
+import com.plub_kao.asset_it_support.entity.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
+import com.plub_kao.asset_it_support.entity.equipment.Equipment;
+import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.BorrowRepository;
+import com.plub_kao.asset_it_support.repository.EmployeeRepository;
 import com.plub_kao.asset_it_support.service.BorrowService;
+import com.plub_kao.asset_it_support.service.EmployeeService;
+import com.plub_kao.asset_it_support.service.EquipmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +28,14 @@ public class BorrowController {
 
     @Autowired
     private BorrowService borrowService;
-
     @Autowired
     private BorrowRepository borrowRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private EquipmentService equipmentService;
 
 
     @GetMapping("/update-overdue")
@@ -32,7 +44,22 @@ public class BorrowController {
         return "Updated!";
 
     }
-    
+
+    @GetMapping("/employeeRole/dropdown")
+    public List<Role> findEmployeeRoleDropdown() {
+        return employeeService.findAllRole();
+    }
+
+    @GetMapping("/equipmentType/dropDown")
+    public List<EquipmentType> getAllTypeStatuses() {
+        return equipmentService.findAllEquipmentType();
+    }
+
+    @GetMapping("/equipmentBorrow/dropDown")
+    public List<EquipmentView> getAllEquipmentBorrowedById() {
+        return equipmentService.selectEquipmentBorrowedById();
+    }
+
 
     //เรียกดูประวัติการยืมของ Borrow ทั้งหมด
     @GetMapping("/all")

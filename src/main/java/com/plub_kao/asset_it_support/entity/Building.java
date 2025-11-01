@@ -21,8 +21,6 @@ public class Building {
     @Column(name = "building_name", nullable = false, length = 50)
     private String buildingName;
 
-    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
-    private List<Floor> floors;
 
     public Building(String buildingName) {
         this.buildingName = buildingName;
