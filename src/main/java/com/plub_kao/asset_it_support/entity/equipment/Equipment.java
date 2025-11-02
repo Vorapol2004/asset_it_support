@@ -1,8 +1,8 @@
 package com.plub_kao.asset_it_support.entity.equipment;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.plub_kao.asset_it_support.entity.EquipmentStatus;
-import com.plub_kao.asset_it_support.entity.EquipmentType;
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.equipmentType.EquipmentType;
 import com.plub_kao.asset_it_support.entity.lot.Lot;
 import jakarta.persistence.*;
 import lombok.Getter;

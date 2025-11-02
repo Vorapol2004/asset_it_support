@@ -90,9 +90,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
                                WHERE
-                                 e.equipment_status_id = 1;
+                                 e.equipment_status_id = 1
+                                AND et.id = :equipmentTypeId;
             """, nativeQuery = true)
-    List<EquipmentView> selectEquipmentBorrowById();
+    List<EquipmentView> selectEquipmentTypeId(@Param("equipmentTypeId") Integer Id);
 
 
     @Query(value = """
@@ -138,7 +139,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
             """, nativeQuery = true)
     List<EquipmentView> selectEquipmentById(@Param("equipmentId") Integer equipmentId);
 
-    //ฟิลเตอร์ Status ของ equipment ทั้งหมด
+
     @Query(value = """
              SELECT
                                  e.id,
@@ -178,10 +179,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
             WHERE
                es.id = :equipmentStatusId
             """, nativeQuery = true)
-    List<EquipmentView> FilterEquipmentStatus(@Param("equipmentStatusId") int equipmentStatusId);
+    List<EquipmentView> FilterEquipmentStatus(@Param("equipmentStatusId") int Id);
 
 
-    //ฟิลเตอร์ Type ของ equipment ทั้งหมด
     @Query(value = """
              SELECT
                                  e.id,
@@ -221,10 +221,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
             WHERE
                et.id = :equipmentTypeId
             """, nativeQuery = true)
-    List<EquipmentView> FilterEquipmentType(@Param("equipmentTypeId") int equipmentTypeId);
+    List<EquipmentView> FilterEquipmentType(@Param("equipmentTypeId") int id);
 
 
-    //ฟิลเตอร์ Type ของ equipment ทั้งหมด
     @Query(value = """
              SELECT
                                  e.id,
@@ -316,83 +315,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                 )
             """, nativeQuery = true)
     List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword);
-
-
-    //ฟิลเตอร์ lotType ของ equipment ทั้งหมด
-    @Query(value = """
-            SELECT
-                e.id,
-                e.equipment_type_id,
-                et.equipment_type_name,
-                e.equipment_name,
-                e.brand,
-                e.model,
-                e.serial_number,
-                e.license_key,
-                e.equipment_status_id,
-                es.equipment_status_name,
-                l.id AS lot_id,
-                l.lot_name,
-                l.academic_year,
-                l.reference_doc,
-                l.description,
-                l.purchase_date,
-                l.expire_date,
-                lt.id AS lot_type_id,
-                lt.lot_type_name
-            FROM
-                equipment e
-            LEFT JOIN equipment_type et ON
-                et.id = e.equipment_type_id
-            LEFT JOIN equipment_status es ON
-                es.id = e.equipment_status_id
-            LEFT JOIN lot l ON
-                l.id = e.lot_id
-            LEFT JOIN lot_type lt ON
-                lt.id = l.lot_type_id
-            WHERE
-                lt.id = :equipmentLotTypeId
-            
-            """, nativeQuery = true)
-    List<EquipmentView> FilterEquipmentLotType(@Param("equipmentLotTypeId") int equipmentLotTypeId);
-
-    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
-    @Query(value = """
-            SELECT
-                e.id,
-                e.equipment_type_id,
-                et.equipment_type_name,
-                e.equipment_name,
-                e.brand,
-                e.model,
-                e.serial_number,
-                e.license_key,
-                e.equipment_status_id,
-                es.equipment_status_name,
-                l.id AS lot_id,
-                l.lot_name,
-                l.academic_year,
-                l.reference_doc,
-                l.description,
-                l.purchase_date,
-                l.expire_date,
-                lt.id AS lot_type_id,
-                lt.lot_type_name
-            FROM
-                equipment e
-            LEFT JOIN equipment_type et ON
-                et.id = e.equipment_type_id
-            LEFT JOIN equipment_status es ON
-                es.id = e.equipment_status_id
-            LEFT JOIN lot l ON
-                l.id = e.lot_id
-            LEFT JOIN lot_type lt ON
-                lt.id = l.lot_type_id
-            WHERE
-                l.id = :equipmentLotId
-            
-            """, nativeQuery = true)
-    List<EquipmentView> FilterEquipmentLot(@Param("equipmentLotId") int equipmentLotId);
 
 
 }

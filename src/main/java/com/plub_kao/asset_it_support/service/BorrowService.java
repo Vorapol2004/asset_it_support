@@ -1,8 +1,8 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
-import com.plub_kao.asset_it_support.entity.EquipmentStatus;
-import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;

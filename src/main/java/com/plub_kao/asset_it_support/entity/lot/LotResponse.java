@@ -18,7 +18,17 @@ public class LotResponse {
     private LocalDate purchaseDate;
     private LocalDate expireDate;
     private String lotTypeName;
-    private List<EquipmentResponse> equipmentList;
+    private List<EquipmentResponse> equipmentResponses;
 
-
+    @Getter
+    @Setter
+    public static class EquipmentResponse {
+        private Integer id;
+        private String equipmentName;
+        private String brand;
+        private String model;
+        private String serialNumber;
+        private String licenseKey;
+        private Integer equipmentTypeId;
+    }
 }

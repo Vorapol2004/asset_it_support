@@ -1,4 +1,4 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.equipmentStatus;
 
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import jakarta.persistence.*;

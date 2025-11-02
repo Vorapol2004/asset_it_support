@@ -1,15 +1,11 @@
 package com.plub_kao.asset_it_support.controller.main;
 
-import com.plub_kao.asset_it_support.entity.EquipmentType;
-import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.entity.department.View.BuildingView;
 import com.plub_kao.asset_it_support.entity.department.View.RoomView;
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
-import com.plub_kao.asset_it_support.entity.equipment.Equipment;
-import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.BorrowRepository;
 import com.plub_kao.asset_it_support.repository.EmployeeRepository;
 import com.plub_kao.asset_it_support.service.BorrowService;
@@ -53,16 +49,6 @@ public class BorrowController {
     @GetMapping("/employeeRole/dropdown")
     public List<Role> findEmployeeRoleDropdown() {
         return employeeService.findAllRole();
-    }
-
-    @GetMapping("/equipmentType/dropDown")
-    public List<EquipmentType> getAllTypeStatuses() {
-        return equipmentService.findAllEquipmentType();
-    }
-
-    @GetMapping("/equipmentBorrow/dropDown")
-    public List<EquipmentView> getAllEquipmentBorrowedById() {
-        return equipmentService.selectEquipmentBorrowedById();
     }
 
 

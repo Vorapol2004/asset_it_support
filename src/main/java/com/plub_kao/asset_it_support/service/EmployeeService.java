@@ -2,7 +2,7 @@ package com.plub_kao.asset_it_support.service;
 
 
 import com.plub_kao.asset_it_support.entity.department.Department;
-import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;

@@ -1,58 +1,31 @@
 package com.plub_kao.asset_it_support.service;
 
 
-import com.plub_kao.asset_it_support.entity.EquipmentStatus;
-import com.plub_kao.asset_it_support.entity.EquipmentType;
-import com.plub_kao.asset_it_support.entity.equipment.Equipment;
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.equipmentType.EquipmentType;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.lot.LotType;
 import com.plub_kao.asset_it_support.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EquipmentService {
 
 
-    @Autowired
-    private EquipmentRepository equipmentRepository;
-
-    @Autowired
-    private EquipmentStatusRepository equipmentStatusRepository;
-
-    @Autowired
-    private EquipmentTypeRepository equipmentTypeRepository;
-
-    @Autowired
-    private LotTypeRepository lotTypeRepository;
+    private final EquipmentRepository equipmentRepository;
+    private final EquipmentStatusService equipmentStatusService;
+    private final EquipmentTypeService equipmentTypeService;
 
     @Autowired
     private BorrowEquipmentRepository borrowEquipmentRepository;
-
-
-    public List<EquipmentView> findAllEquipment() {
-        return equipmentRepository.findAllEquipment();
-    }
-
-    public List<EquipmentType> findAllEquipmentType() {
-        return equipmentTypeRepository.findAll();
-    }
-
-    public List<EquipmentStatus> findAllEquipmentStatus() {
-        return equipmentStatusRepository.findAll();
-    }
-
-    public List<EquipmentView> selectEquipmentBorrowedById() {
-        return equipmentRepository.selectEquipmentBorrowById();
-    }
-
-    public List<LotType> findAllLotType() {
-        return lotTypeRepository.findAll();
-    }
 
 
     public List<EquipmentView> SelectEquipment(@Param("equipmentStatusId") int equipmentStatusId) {
@@ -60,13 +33,13 @@ public class EquipmentService {
     }
 
 
-    //ฟิลเตอร์ Status และ Type ของ equipment ทั้งหมด
-    public List<EquipmentView> filterStatusAndType(Integer equipmentStatusId, Integer equipmentTypeId) {
+    public List<EquipmentView> filterStatusAndType(@RequestParam Integer equipmentStatusId,
+                                                   @RequestParam Integer equipmentTypeId) {
         if (equipmentStatusId != null && equipmentTypeId == null) {
-            return equipmentRepository.FilterEquipmentStatus(equipmentStatusId);
+            return equipmentStatusService.FilterEquipmentStatus(equipmentStatusId);
         }
         if (equipmentStatusId == null && equipmentTypeId != null) {
-            return equipmentRepository.FilterEquipmentType(equipmentTypeId);
+            return equipmentTypeService.FilterEquipmentType(equipmentTypeId);
         }
         if (equipmentStatusId != null && equipmentTypeId != null) {
             return equipmentRepository.findByDynamicFilter(equipmentStatusId, equipmentTypeId);
@@ -74,23 +47,33 @@ public class EquipmentService {
         return equipmentRepository.findAllEquipment();
     }
 
-    //ฟิลเตอร์ add
+
+    public List<EquipmentView> selectEquipment(@RequestParam(required = false) Integer Id) {
+        try {
+            List<EquipmentView> equipment;
+            if (Id != null) {
+                equipment = equipmentRepository.selectEquipmentTypeId(Id);
+            } else {
+                equipment = equipmentRepository.findAllEquipment();
+            }
+            return equipment;
+        } catch (Exception e) {
+            throw new RuntimeException("พัง", e);
+        }
+
+    }
 
 
     //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
-    public List<EquipmentView> searchEquipmentKeyword(@Param("keyword") String keyword) {
-        return equipmentRepository.searchEquipmentKeyword(keyword);
+    public List<EquipmentView> searchEquipmentKeyword(@RequestParam("keyword") String keyword) {
+        try {
+            return equipmentRepository.searchEquipmentKeyword(keyword);
+        } catch (Exception e) {
+            throw new RuntimeException("พัง", e);
+        }
+
     }
 
-    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
-    public List<EquipmentView> FilterEquipmentLotType(@Param("equipmentLotTypeId") int equipmentLotTypeId) {
-        return equipmentRepository.FilterEquipmentLotType(equipmentLotTypeId);
-    }
-
-    //ฟิลเตอร์ lot ของ equipment ทั้งหมด
-    public List<EquipmentView> FilterEquipmentLot(@Param("equipmentLotId") int equipmentLotId) {
-        return equipmentRepository.FilterEquipmentLot(equipmentLotId);
-    }
 
     @Transactional
     public boolean deleteEquipment(Integer id) {

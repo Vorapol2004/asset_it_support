@@ -2,7 +2,7 @@ package com.plub_kao.asset_it_support.entity.employee;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plub_kao.asset_it_support.entity.department.Department;
-import com.plub_kao.asset_it_support.entity.Role;
+import com.plub_kao.asset_it_support.entity.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
