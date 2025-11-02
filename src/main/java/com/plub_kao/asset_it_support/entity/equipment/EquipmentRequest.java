@@ -7,11 +7,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EquipmentRequest {
-    private String equipmentName;
+
+
+    private Integer id;
+    private String equipmentName; // อนุโลมให้เว้นได้ เพราะระบบอาจตั้งชื่อ auto
+
     private String brand;
+
     private String model;
+
     private String serialNumber;
+
     private String licenseKey;
-    private Integer equipmentStatusId;
+
     private Integer equipmentTypeId;
+
+    // equipmentStatusId ไม่ต้องใส่ ถ้าคุณตั้งค่า default เป็น “Available” ใน service
 }

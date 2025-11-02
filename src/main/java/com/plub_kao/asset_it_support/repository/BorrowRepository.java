@@ -129,7 +129,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             WHERE
                 bs.id = :borrowStatusId
                 AND r.id = :roleId
-                AND 
+                AND
             
             """, nativeQuery = true)
     List<BorrowView> filterBorrowStatus(@Param("borrowStatusId") Integer borrowStatusId);

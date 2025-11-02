@@ -6,11 +6,8 @@ import com.plub_kao.asset_it_support.entity.EquipmentType;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.lot.Lot;
 import com.plub_kao.asset_it_support.entity.lot.LotRequest;
+import com.plub_kao.asset_it_support.entity.lot.LotResponse;
 import com.plub_kao.asset_it_support.entity.lot.LotType;
-import com.plub_kao.asset_it_support.repository.EquipmentStatusRepository;
-import com.plub_kao.asset_it_support.repository.EquipmentTypeRepository;
-import com.plub_kao.asset_it_support.repository.LotRepository;
-import com.plub_kao.asset_it_support.repository.LotTypeRepository;
 import com.plub_kao.asset_it_support.service.EquipmentService;
 import com.plub_kao.asset_it_support.service.LotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,9 +79,9 @@ public class EquipmentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Lot> addLot(@RequestBody LotRequest request) {
+    public ResponseEntity<LotResponse> addLot(@RequestBody LotRequest request) {
         try {
-            Lot savedLot = lotService.addLot(request);
+            LotResponse savedLot = lotService.addLot(request);
             return new ResponseEntity<>(savedLot, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();

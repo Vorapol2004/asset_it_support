@@ -4,9 +4,7 @@ import com.plub_kao.asset_it_support.entity.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.EquipmentType;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.EquipmentRequest;
-import com.plub_kao.asset_it_support.entity.lot.Lot;
-import com.plub_kao.asset_it_support.entity.lot.LotRequest;
-import com.plub_kao.asset_it_support.entity.lot.LotType;
+import com.plub_kao.asset_it_support.entity.lot.*;
 import com.plub_kao.asset_it_support.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class LotService {
     private EquipmentStatusRepository equipmentStatusRepository;
 
 
-    public Lot addLot(LotRequest request) {
+    public LotResponse addLot(LotRequest request) {
 
         LotType lotType = lotTypeRepository.findById(request.getLotTypeId())
                 .orElseThrow(() -> new RuntimeException("LotType not found"));
@@ -44,7 +42,6 @@ public class LotService {
         newLot.setLotType(lotType);
 
         Lot savedLot = lotRepository.save(newLot);
-
 
         if (request.getEquipmentList() != null && !request.getEquipmentList().isEmpty()) {
             List<Equipment> equipments = new ArrayList<>();
@@ -74,7 +71,7 @@ public class LotService {
             savedLot.setEquipmentList(equipments);
         }
 
-        return savedLot;
+        return LotMapper.toLotResponse(savedLot);
     }
 
 
