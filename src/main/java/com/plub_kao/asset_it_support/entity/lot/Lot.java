@@ -2,6 +2,7 @@ package com.plub_kao.asset_it_support.entity.lot;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
+import com.plub_kao.asset_it_support.entity.lotType.LotType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

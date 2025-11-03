@@ -1,16 +1,13 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.building;
 
+import com.plub_kao.asset_it_support.entity.department.Department;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
 @Table(name = "building")
 public class Building {
     @Id
@@ -21,8 +18,8 @@ public class Building {
     @Column(name = "building_name", nullable = false, length = 50)
     private String buildingName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    public Building(String buildingName) {
-        this.buildingName = buildingName;
-    }
 }

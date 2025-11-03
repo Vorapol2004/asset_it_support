@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/equipmentstatus")
+@RequestMapping("/equipment_status")
 public class EquipmentStatusController {
 
 

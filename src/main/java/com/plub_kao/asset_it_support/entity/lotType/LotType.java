@@ -1,4 +1,4 @@
-package com.plub_kao.asset_it_support.entity.lot;
+package com.plub_kao.asset_it_support.entity.lotType;
 
 import jakarta.persistence.*;
 import lombok.Getter;

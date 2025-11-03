@@ -1,8 +1,7 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
 
-import com.plub_kao.asset_it_support.entity.equipmentType.EquipmentTypeView;
-import com.plub_kao.asset_it_support.entity.lot.LotTypeView;
+import com.plub_kao.asset_it_support.entity.lotType.LotTypeView;
 import com.plub_kao.asset_it_support.service.LotTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lottype")
+@RequestMapping("/lot_type")
 public class LotTypeController {
 
     private final LotTypeService lotTypeService;

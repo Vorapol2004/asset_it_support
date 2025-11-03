@@ -1,8 +1,7 @@
 package com.plub_kao.asset_it_support.repository;
 
-import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatusView;
-import com.plub_kao.asset_it_support.entity.lot.LotType;
-import com.plub_kao.asset_it_support.entity.lot.LotTypeView;
+import com.plub_kao.asset_it_support.entity.lotType.LotType;
+import com.plub_kao.asset_it_support.entity.lotType.LotTypeView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

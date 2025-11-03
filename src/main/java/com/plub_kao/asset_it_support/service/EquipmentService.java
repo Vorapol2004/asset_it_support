@@ -1,10 +1,7 @@
 package com.plub_kao.asset_it_support.service;
 
 
-import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
-import com.plub_kao.asset_it_support.entity.equipmentType.EquipmentType;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
-import com.plub_kao.asset_it_support.entity.lot.LotType;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +45,11 @@ public class EquipmentService {
     }
 
 
-    public List<EquipmentView> selectEquipment(@RequestParam(required = false) Integer Id) {
+    public List<EquipmentView> selectEquipmentByType(@RequestParam(required = false) Integer equipmentTypeId) {
         try {
             List<EquipmentView> equipment;
-            if (Id != null) {
-                equipment = equipmentRepository.selectEquipmentTypeId(Id);
+            if (equipmentTypeId != null) {
+                equipment = equipmentRepository.selectEquipmentTypeId(equipmentTypeId);
             } else {
                 equipment = equipmentRepository.findAllEquipment();
             }

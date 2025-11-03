@@ -1,57 +1,30 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.department.Department;
+import com.plub_kao.asset_it_support.entity.department.DepartmentView;
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatusView;
 import com.plub_kao.asset_it_support.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class DepartmentService {
 
-    @Autowired
-    private DepartmentRepository departmentRepository;
+
+    private final DepartmentRepository departmentRepository;
 
 
-    public Department newDepartment(Department departmentName) {
-        return departmentRepository.save(departmentName);
+    public List<DepartmentView> findAll() {
+        try {
+            return departmentRepository.findAllByDepartment();
+        } catch (RuntimeException e) {
+            throw new RuntimeException("พัง", e);
+        }
     }
-
-
-//    @Transactional
-//    public String addDepartmentLocation(DepartmentLocationRequest request) {
-//
-//        Department department = departmentRepository.findById(request.getDepartmentId())
-//                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
-//
-//
-//        Building building = new Building();
-//        building.setBuildingName(request.getBuildingName());
-//        buildingRepository.save(building);
-//
-//
-//        Floor floor = new Floor();
-//        floor.setFloorName(request.getFloorName());
-//        floor.setBuilding(building);
-//        floorRepository.save(floor);
-//
-//        Room room = new Room();
-//        room.setRoomName(request.getRoomName());
-//        room.setFloor(floor);
-//        roomRepository.save(room);
-//
-//
-//        DepartmentRoom departmentRoom = new DepartmentRoom();
-//        departmentRoom.setDepartment(department);
-//        departmentRoom.setRoom(room);
-//        departmentRoomRepository.save(departmentRoom);
-//
-//
-//        return department.getDepartmentName()
-//               + "  " + request.getBuildingName()
-//               + "  " + request.getFloorName()
-//               + " " + request.getRoomName();
-//
-//    }
 
 
 }

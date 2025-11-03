@@ -1,19 +1,29 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
 
+import com.plub_kao.asset_it_support.entity.floor.FloorView;
+import com.plub_kao.asset_it_support.entity.room.RoomView;
 import com.plub_kao.asset_it_support.service.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/room")
 public class RoomController {
 
-    @Autowired
-    private RoomService roomService;
+
+    private final RoomService roomService;
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<RoomView>> filterFloor(@RequestParam Integer floorId) {
+        List<RoomView> RoomView = roomService.filterRoom(floorId);
+        return ResponseEntity.ok(RoomView);
+    }
 
 
 }

@@ -1,7 +1,6 @@
 package com.plub_kao.asset_it_support.service;
 
-import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatusView;
-import com.plub_kao.asset_it_support.entity.lot.LotTypeView;
+import com.plub_kao.asset_it_support.entity.lotType.LotTypeView;
 import com.plub_kao.asset_it_support.repository.LotTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
