@@ -22,6 +22,11 @@ public class EquipmentController {
     private final EquipmentService equipmentService;
     private final LotService lotService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<EquipmentView>> SelectAll() {
+        List<EquipmentView> equipmentAll = equipmentService.findAll();
+        return new ResponseEntity<>(equipmentAll, HttpStatus.OK);
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<EquipmentView>> searchEquipmentKeyword(@RequestParam String keyword) {
