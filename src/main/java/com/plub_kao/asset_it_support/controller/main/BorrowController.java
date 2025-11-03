@@ -2,7 +2,7 @@ package com.plub_kao.asset_it_support.controller.main;
 
 import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
-import com.plub_kao.asset_it_support.entity.borrow.NewBorrow;
+import com.plub_kao.asset_it_support.entity.borrow.BorrowRequest;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.repository.BorrowRepository;
 import com.plub_kao.asset_it_support.repository.EmployeeRepository;
@@ -81,7 +81,7 @@ public class BorrowController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BorrowResponse> createBorrow(@RequestBody NewBorrow request) {
+    public ResponseEntity<BorrowResponse> createBorrow(@RequestBody BorrowRequest request) {
         try {
             BorrowResponse response = borrowService.createBorrow(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);

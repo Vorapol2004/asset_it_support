@@ -1,8 +1,6 @@
 package com.plub_kao.asset_it_support.controller.main;
 
 
-import com.plub_kao.asset_it_support.entity.employee.Employee;
-import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +17,6 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
-
-    //add newEmployee
-    @PostMapping("/add")
-    public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeRequest request) {
-        Employee saveEmployee = employeeService.addNewEmployee(request);
-        return new ResponseEntity<>(saveEmployee, HttpStatus.CREATED);
-       
-    }
 
 
     //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
