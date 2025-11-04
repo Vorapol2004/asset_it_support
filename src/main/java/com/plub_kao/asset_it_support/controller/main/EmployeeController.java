@@ -70,4 +70,9 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(employees);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeRequest request) {
+        return ResponseEntity.ok(employeeService.newEmployee(request));
+    }
 }
