@@ -1,9 +1,13 @@
 package com.plub_kao.asset_it_support.service;
 
 
+import com.plub_kao.asset_it_support.entity.BorrowEquipment;
+import com.plub_kao.asset_it_support.entity.borrow.Borrow;
+import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
+import com.plub_kao.asset_it_support.entity.employee.EmployeeResponse;
 import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.entity.room.Room;
@@ -15,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,7 +76,8 @@ public class EmployeeService {
         return employeeRepository.searchEmployeeKeyword(keyword);
     }
 
-    public Employee addEmployee(EmployeeRequest request) {
+    @Transactional
+    public EmployeeResponse addEmployee(EmployeeRequest request) {
         Employee employee = new Employee();
         employee.setFirstName(request.getFirstName());
         employee.setLastName(request.getLastName());
@@ -90,8 +97,33 @@ public class EmployeeService {
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
         employee.setRoom(room);
 
+
         employeeRepository.save(employee);
 
-        return employeeRepository.save(employee);
+        return createBorrowResponse(employee);
+    }
+
+    private EmployeeResponse createBorrowResponse(Employee savedEmployee) {
+        EmployeeResponse response = new EmployeeResponse();
+        response.setEmployeeId(savedEmployee.getId());
+        response.setFirstName(savedEmployee.getFirstName());
+        response.setLastName(savedEmployee.getLastName());
+        response.setEmail(savedEmployee.getEmail());
+        response.setPhone(savedEmployee.getPhone());
+        response.setDescription(savedEmployee.getDescription());
+
+        if (savedEmployee.getDepartment() != null) {
+            response.setDepartmentName(savedEmployee.getDepartment().getDepartmentName());
+        }
+
+        if (savedEmployee.getRole() != null) {
+            response.setRoleName(savedEmployee.getRole().getRoleName());
+        }
+
+        if (savedEmployee.getRoom() != null) {
+            response.setRoomName(savedEmployee.getRoom().getRoomName());
+        }
+
+        return response;
     }
 }
