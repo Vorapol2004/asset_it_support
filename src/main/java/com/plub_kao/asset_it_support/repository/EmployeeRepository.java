@@ -15,7 +15,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = """
                 SELECT
                     e.id AS employee_id,
-                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.first_name,
+                    e.last_name,
                     e.email,
                     e.phone,
                     e.description,
@@ -40,7 +41,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = """
                 SELECT
                     e.id AS employee_id,
-                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.first_name,
+                    e.last_name,
                     e.email,
                     e.phone,
                     e.description,
@@ -64,7 +66,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = """
                 SELECT
                 	e.id AS employee_id,
-                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.first_name,
+                    e.last_name,
                     e.email,
                     e.phone,
                     e.description,
@@ -88,7 +91,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = """
                 SELECT
                     e.id AS employee_id,
-                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.first_name,
+                    e.last_name,
                     e.email,
                     e.phone,
                     e.description,
@@ -118,7 +122,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             
                     SELECT
                     e.id AS employee_id,
-                    CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+                    e.first_name,
+                    e.last_name,
                     e.email,
                     e.phone,
                     e.description,
