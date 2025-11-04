@@ -1,6 +1,8 @@
 package com.plub_kao.asset_it_support.controller.main;
 
 
+import com.plub_kao.asset_it_support.entity.employee.Employee;
+import com.plub_kao.asset_it_support.entity.employee.view.EmployeeRequest;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,8 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-
     @Autowired
     private EmployeeService employeeService;
-
 
     //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
     @GetMapping("/all")
@@ -69,6 +69,11 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<EmployeeView> findEmployeeById(@PathVariable Integer employeeId) {
+        return ResponseEntity.ok(employeeService.findEmployeeById(employeeId));
     }
 
     @PostMapping("/create")

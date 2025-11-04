@@ -5,6 +5,7 @@ import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -146,4 +147,24 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
             @Param("keyword") String keyword);
 
 
+    @Query(value = """
+        e.id AS employee_id,
+        CONCAT(e.first_name, ' ', e.last_name) AS employee_name,
+        e.email,
+        e.phone,
+        e.description,
+        e.department_id,
+        d.department_name,
+        e.role_id,
+        r.role_name
+        FROM
+            employee e
+        LEFT JOIN
+            department d ON d.id = e.department_id
+        LEFT JOIN
+            role r ON r.id = e.role_id
+        WHERE
+            e.id = :employeeId
+    """, nativeQuery = true)
+    EmployeeView findEmployeesById(Integer employeeId);
 }
