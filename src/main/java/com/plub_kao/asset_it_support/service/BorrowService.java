@@ -1,6 +1,7 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
+import com.plub_kao.asset_it_support.entity.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.role.Role;
@@ -79,95 +80,53 @@ public class BorrowService {
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {
+        Employee employee = employeeRepository.findById(request.getEmployeeRequest().getEmployeeId()).orElseThrow();
 
-        BorrowRequest.EmployeeRequest employeeRequest = request.getEmployeeRequest();
-        Employee employee;
+        BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
 
-        // 🧍‍♂️ 1. หาผู้ยืมหรือเพิ่มใหม่
-        if (employeeRequest.getEmployeeId() != null) {
-            employee = employeeRepository.findById(employeeRequest.getEmployeeId())
-                    .orElseThrow(() -> new RuntimeException("ไม่พบผู้ยืม"));
-        } else {
-            employee = new Employee();
-            employee.setFirstName(employeeRequest.getFirstName());
-            employee.setLastName(employeeRequest.getLastName());
-            employee.setEmail(employeeRequest.getEmail());
-            employee.setPhone(employeeRequest.getPhone());
-            employee.setDescription(employeeRequest.getDescription());
-
-            if (employeeRequest.getRoleId() != null) {
-                Role role = roleRepository.findById(employeeRequest.getRoleId())
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found"));
-                employee.setRole(role);
-            }
-
-            Department department = departmentRepository.findById(employeeRequest.getDepartmentId())
-                    .orElseThrow(() -> new RuntimeException("ไม่พบแผนก ID: " + employeeRequest.getDepartmentId()));
-            employee.setDepartment(department);
-
-            employee = employeeRepository.save(employee);
-        }
-
-        // 🧾 2. สร้าง Borrow หลัก
         Borrow borrow = new Borrow();
         borrow.setEmployee(employee);
-        borrow.setBorrowDate(request.getBorrowDate() != null ? request.getBorrowDate() : LocalDate.now());
+        borrow.setBorrowStatus(borrowStatus);
+        borrow.setBorrowDate(request.getBorrowDate());
         borrow.setReferenceDoc(request.getReferenceDoc());
-        borrow.setBorrowStatus(borrowStatusRepository.findById(1)
-                .orElseThrow(() -> new RuntimeException("ไม่พบสถานะยืม")));
-        Borrow savedBorrow = borrowRepository.save(borrow);
 
-
-        // ⚙️ 3. ดึงสถานะอุปกรณ์ “ยืมแล้ว”
-        EquipmentStatus borrowedStatus = equipmentStatusRepository.findById(2)
-                .orElseThrow(() -> new RuntimeException("ไม่พบสถานะอุปกรณ์"));
-
-        // 🧰 4. Loop หาอุปกรณ์จาก serialNumber หรือ licenseKey
-        List<BorrowEquipment> borrowEquipments = new ArrayList<>();
-
-        for (BorrowRequest.EquipmentIdentifier identifier : request.getEquipmentIdentifiers()) {
-            String keyword = null;
-
-            if (identifier.getSerialNumber() != null && !identifier.getSerialNumber().isBlank()) {
-                keyword = identifier.getSerialNumber().trim();
-            } else if (identifier.getLicenseKey() != null && !identifier.getLicenseKey().isBlank()) {
-                keyword = identifier.getLicenseKey().trim();
-            }
-
-            if (keyword == null) {
-                throw new RuntimeException("อุปกรณ์ไม่มี serial number หรือ license key");
-            }
-
-            System.out.println("🔍 Searching equipment by keyword: " + keyword);
-
-            List<EquipmentView> foundList = equipmentRepository.equipmentIdentifier(keyword);
-            if (foundList.isEmpty()) {
-                throw new RuntimeException("ไม่พบอุปกรณ์ที่พร้อมใช้งาน: " + keyword);
-            }
-
-            EquipmentView foundView = foundList.get(0);
-
-            // ดึง entity ตัวจริงเพื่อตั้งสถานะ
-            Equipment equipment = equipmentRepository.findById(foundView.getId())
-                    .orElseThrow(() -> new RuntimeException("ไม่พบอุปกรณ์ ID: " + foundView.getId()));
-
-            equipment.setEquipmentStatus(borrowedStatus);
+        List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
+        for (Integer equipmentId : request.getEquipmentIds()) {
+            Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow();
+            equipment.setEquipmentStatus(equipmentStatusRepository.findById(2).orElseThrow());
             equipmentRepository.save(equipment);
 
-            // 🧩 ผูก BorrowEquipment
             BorrowEquipment borrowEquipment = new BorrowEquipment();
-            borrowEquipment.setBorrow(savedBorrow);
             borrowEquipment.setEquipment(equipment);
             borrowEquipment.setDueDate(request.getDueDate());
-            borrowEquipments.add(borrowEquipment);
+            borrowEquipment.setBorrow(borrow);
+
+            borrowEquipmentList.add(borrowEquipment);
         }
 
-        // 💾 Save ทั้งหมด
-        borrowEquipmentRepository.saveAll(borrowEquipments);
+        borrow.setBorrowEquipments(borrowEquipmentList);
 
-
-        return BorrowResponse.from(savedBorrow, employee, request);
+        return createBorrowResponse(borrowRepository.save(borrow));
     }
 
+    private BorrowResponse createBorrowResponse(Borrow savedBorrow) {
+        BorrowResponse response = new BorrowResponse();
+        response.setId(savedBorrow.getId());
+
+        Employee employee = savedBorrow.getEmployee();
+        response.setEmployeeId(employee.getId());
+        response.setEmployeeName(employee.getFirstName() + " " + employee.getLastName());
+
+        response.setReferenceDoc(savedBorrow.getReferenceDoc());
+        response.setBorrowDate(savedBorrow.getBorrowDate());
+        response.setEquipments(new ArrayList<>());
+
+        List<BorrowEquipment> borrowEquipments = savedBorrow.getBorrowEquipments();
+        for (BorrowEquipment borrowEquipment : borrowEquipments) {
+            response.addEquipmentInfo(borrowEquipment.getEquipment());
+        }
+
+        return response;
+    }
 
 }
