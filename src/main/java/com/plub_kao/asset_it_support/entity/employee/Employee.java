@@ -1,8 +1,8 @@
 package com.plub_kao.asset_it_support.entity.employee;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.role.Role;
+import com.plub_kao.asset_it_support.entity.room.Room;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "employee")
 public class Employee {
     @Id
@@ -41,5 +40,8 @@ public class Employee {
     @Column(name = "phone", nullable = false, length = 10)
     private String phone;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
 
 }

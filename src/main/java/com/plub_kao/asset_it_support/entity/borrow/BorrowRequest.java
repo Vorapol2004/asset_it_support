@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.entity.borrow;
 
+import com.plub_kao.asset_it_support.entity.employee.Employee;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,25 +12,11 @@ import java.util.List;
 public class BorrowRequest {
 
 
-    private EmployeeRequest employeeRequest;
+    private Integer employeeId;
     private String referenceDoc;
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private List<Integer> equipmentIds;
 
-
-    @Getter
-    @Setter
-    public static class EmployeeRequest {
-
-        private Integer employeeId;
-        private String firstName;
-        private String lastName;
-        private String email;
-        private String phone;
-        private String description;
-        private Integer departmentId;
-        private Integer roleId;
-    }
 
 }

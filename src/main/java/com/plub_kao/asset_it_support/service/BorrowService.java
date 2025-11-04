@@ -2,6 +2,8 @@ package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
 import com.plub_kao.asset_it_support.entity.BorrowStatus;
+import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
+import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
 import com.plub_kao.asset_it_support.entity.role.Role;
@@ -13,6 +15,7 @@ import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
+import com.plub_kao.asset_it_support.entity.room.RoomView;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +83,7 @@ public class BorrowService {
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {
-        Employee employee = employeeRepository.findById(request.getEmployeeRequest().getEmployeeId()).orElseThrow();
+        Employee employee = employeeRepository.findById(request.getEmployeeId()).orElseThrow();
 
         BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
 
@@ -128,5 +131,6 @@ public class BorrowService {
 
         return response;
     }
+
 
 }
