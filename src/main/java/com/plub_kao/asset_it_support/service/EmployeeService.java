@@ -1,11 +1,15 @@
 package com.plub_kao.asset_it_support.service;
 
 
+import com.plub_kao.asset_it_support.entity.department.Department;
+import com.plub_kao.asset_it_support.entity.employee.Employee;
+import com.plub_kao.asset_it_support.entity.employee.view.EmployeeRequest;
 import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
 import com.plub_kao.asset_it_support.repository.DepartmentRepository;
 import com.plub_kao.asset_it_support.repository.EmployeeRepository;
 import com.plub_kao.asset_it_support.repository.RoleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -64,5 +68,22 @@ public class EmployeeService {
         return employeeRepository.searchEmployeeKeyword(keyword);
     }
 
+    public Employee newEmployee(EmployeeRequest request) {
+        Employee employee = new Employee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhone(request.getPhone());
+        employee.setDescription(request.getDescription());
 
+        Department department = departmentRepository.findById(request.getDepartmentId())
+                .orElseThrow(() -> new EntityNotFoundException("Department not found id: " + request.getDepartmentId()));
+        employee.setDepartment(department);
+
+        Role role = roleRepository.findById(request.getRoleId())
+                .orElseThrow(() -> new EntityNotFoundException("Role not found id: " + request.getRoleId()));
+        employee.setRole(role);
+
+        return employeeRepository.save(employee);
+    }
 }
