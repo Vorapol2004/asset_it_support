@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,12 +36,13 @@ public class Borrow {
     @Column(name = "reference_doc")
     private String referenceDoc;
 
-    @OneToMany(mappedBy = "borrow")
-    private List<BorrowEquipment> borrowEquipment;
-
+ 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "borrow_status_id", nullable = false)
     private BorrowStatus borrowStatus;
 
+
+    @OneToMany(mappedBy = "borrow", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowEquipment> borrowEquipments = new ArrayList<>();
 
 }

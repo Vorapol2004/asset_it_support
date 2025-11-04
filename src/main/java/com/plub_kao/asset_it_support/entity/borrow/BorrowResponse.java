@@ -16,7 +16,7 @@ public class BorrowResponse {
     private String referenceDoc;
     private LocalDate borrowDate;
     private Integer BorrowStatus;
-    private List<Integer> equipmentId;
+    private List<EquipmentInfo> equipments;
 
 
     @Getter
@@ -34,13 +34,31 @@ public class BorrowResponse {
         private Integer roleId;
     }
 
+    @Getter
+    @Setter
+    public static class EquipmentInfo {
+        private String equipmentName;
+        private String serialNumber;
+        private String licenseKey;
+    }
+
     public static BorrowResponse from(Borrow borrow, Employee employee, BorrowRequest request) {
-        BorrowResponse BorrowResponse = new BorrowResponse();
-        BorrowResponse.setId(borrow.getId());
-        BorrowResponse.setReferenceDoc(borrow.getReferenceDoc());
-        BorrowResponse.setBorrowDate(borrow.getBorrowDate());
-        BorrowResponse.setBorrowStatus(borrow.getBorrowStatus().getId());
-        BorrowResponse.setEquipmentId(request.getEquipmentId());
+        BorrowResponse res = new BorrowResponse();
+        res.setId(borrow.getId());
+        res.setReferenceDoc(borrow.getReferenceDoc());
+        res.setBorrowDate(borrow.getBorrowDate());
+        res.setBorrowStatus(borrow.getBorrowStatus().getId());
+
+        List<EquipmentInfo> equipmentInfos = borrow.getBorrowEquipments().stream()
+                .map(be -> {
+                    EquipmentInfo info = new EquipmentInfo();
+                    info.setEquipmentName(be.getEquipment().getEquipmentName());
+                    info.setSerialNumber(be.getEquipment().getSerialNumber());
+                    info.setLicenseKey(be.getEquipment().getLicenseKey());
+                    return info;
+                })
+                .toList();
+        res.setEquipments(equipmentInfos);
 
         EmployeeResponse empRes = new EmployeeResponse();
         empRes.setId(employee.getId());
@@ -53,9 +71,9 @@ public class BorrowResponse {
         empRes.setDepartmentId(employee.getDepartment().getId());
         empRes.setRoleId(employee.getRole() != null ? employee.getRole().getId() : null);
 
-        BorrowResponse.setEmployeeResponse(empRes);
+        res.setEmployeeResponse(empRes);
 
-        return BorrowResponse;
+        return res;
     }
 
 }

@@ -15,7 +15,7 @@ public class BorrowRequest {
     private String referenceDoc;
     private LocalDate borrowDate;
     private LocalDate dueDate;
-    private List<Integer> equipmentId;
+    private List<EquipmentIdentifier> equipmentIdentifiers;
 
 
     @Getter
@@ -31,5 +31,14 @@ public class BorrowRequest {
         private Integer departmentId;
         private Integer roleId;
     }
+
+    @Getter
+    @Setter
+    public static class EquipmentIdentifier {
+
+        private String serialNumber;
+        private String licenseKey;
+    }
+
 
 }

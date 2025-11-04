@@ -7,11 +7,60 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
 
 
+    Optional<Equipment> findBySerialNumber(String serialNumber);
+
+    Optional<Equipment> findByLicenseKey(String licenseKey);
+
     //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
+    @Query(value = """
+                SELECT
+                                 e.id,
+                                 e.equipment_type_id,
+                                 et.equipment_type_name,
+            
+                                 e.equipment_name,
+                                 e.brand,
+                                 e.model,
+                                 e.serial_number,
+                                 e.license_key,
+            
+                                 e.equipment_status_id,
+                                 es.equipment_status_name,
+            
+                                 l.id AS lot_id ,
+                                 l.lot_name,
+                                 l.academic_year,
+                                 l.reference_doc,
+                                 l.description,
+                                 l.purchase_date,
+                                 l.expire_date,
+            
+                                 lt.id AS lot_type_id,
+                                 lt.lot_type_name
+            
+                               FROM
+                                   `equipment` e
+                               LEFT JOIN
+                               	equipment_type et ON et.id = e.equipment_type_id
+                               LEFT JOIN
+                               	equipment_status es ON es.id = e.equipment_status_id
+                               LEFT JOIN
+                               	lot l ON l.id = e.lot_id
+                               LEFT JOIN
+                               	lot_type lt ON lt.id = l.lot_type_id
+                               WHERE
+                                e.serial_number = :keyword
+                                OR e.license_key = :keyword
+                                AND e.equipment_status_id = 1 ;
+            
+            """, nativeQuery = true)
+    List<EquipmentView> equipmentIdentifier(@Param("keyword") String keyword);
+
     @Query(value = """
                 SELECT
                                  e.id,
