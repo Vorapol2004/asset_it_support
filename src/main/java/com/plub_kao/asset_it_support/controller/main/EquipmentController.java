@@ -43,6 +43,14 @@ public class EquipmentController {
         return ResponseEntity.ok(equipment);
     }
 
+    @GetMapping("/identifier")
+    public ResponseEntity<List<EquipmentView>> selectEquipmentIdentifier(
+            @RequestParam(required = false) String keyword
+    ) {
+        List<EquipmentView> equipment = equipmentService.equipmentIdentifier(keyword);
+        return ResponseEntity.ok(equipment);
+    }
+
     @GetMapping("/select_equipment_type")
     public ResponseEntity<List<EquipmentView>> selectEquipmentType(@RequestParam(required = false) Integer equipmentId) {
         List<EquipmentView> equipment = equipmentService.selectEquipmentByType(equipmentId);

@@ -33,8 +33,23 @@ public class EquipmentService {
 
     }
 
+    public List<EquipmentView> equipmentIdentifier(@RequestParam String keyword) {
+        try {
+            return equipmentRepository.equipmentIdentifier(keyword);
+        } catch (Exception e) {
+            throw new RuntimeException("ไม่เจอ", e);
+        }
+
+    }
+
+
     public List<EquipmentView> SelectEquipment(@Param("equipmentStatusId") int equipmentStatusId) {
-        return equipmentRepository.selectEquipmentById(equipmentStatusId);
+        try {
+            return equipmentRepository.selectEquipmentById(equipmentStatusId);
+        } catch (Exception e) {
+            throw new RuntimeException("ไม่เจอ", e);
+        }
+
     }
 
 

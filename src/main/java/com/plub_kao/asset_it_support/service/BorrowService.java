@@ -30,24 +30,24 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BorrowService {
 
-    @Autowired
-    private BorrowRepository borrowRepository;
-    @Autowired
-    private EquipmentRepository equipmentRepository;
-    @Autowired
-    private BorrowStatusRepository borrowStatusRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private BorrowEquipmentRepository borrowEquipmentRepository;
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private EquipmentStatusRepository equipmentStatusRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+
+    private final BorrowRepository borrowRepository;
+
+    private final EquipmentRepository equipmentRepository;
+
+    private final BorrowStatusRepository borrowStatusRepository;
+
+    private final EmployeeRepository employeeRepository;
+
+    private final BorrowEquipmentRepository borrowEquipmentRepository;
+
+    private final EmployeeService employeeService;
+
+    private final EquipmentStatusRepository equipmentStatusRepository;
+
+    private final DepartmentRepository departmentRepository;
+
+    private final RoleRepository roleRepository;
 
 
     @Transactional
@@ -75,6 +75,7 @@ public class BorrowService {
         List<BorrowView> borrowAll = borrowRepository.searchBorrowEquipment(keyword);
         return borrowRepository.searchBorrowEquipment(keyword);
     }
+
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {

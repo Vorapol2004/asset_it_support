@@ -54,9 +54,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
                                WHERE
-                                e.serial_number = :keyword
-                                OR e.license_key = :keyword
-                                AND e.equipment_status_id = 1 ;
+                                (e.serial_number = :keyword
+                                OR e.license_key = :keyword)
+                                AND e.equipment_status_id = 1;
             
             """, nativeQuery = true)
     List<EquipmentView> equipmentIdentifier(@Param("keyword") String keyword);
