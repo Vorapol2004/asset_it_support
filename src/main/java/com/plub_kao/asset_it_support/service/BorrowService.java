@@ -14,6 +14,7 @@ import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -40,16 +41,7 @@ public class BorrowService {
 
     private final EmployeeRepository employeeRepository;
 
-    private final BorrowEquipmentRepository borrowEquipmentRepository;
-
-    private final EmployeeService employeeService;
-
     private final EquipmentStatusRepository equipmentStatusRepository;
-
-    private final DepartmentRepository departmentRepository;
-
-    private final RoleRepository roleRepository;
-
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * *") // รันทุกวันตอนเที่ยงคืน
@@ -80,7 +72,8 @@ public class BorrowService {
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {
-        Employee employee = employeeRepository.findById(request.getEmployeeRequest().getEmployeeId()).orElseThrow();
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
 
         BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
 
@@ -92,8 +85,11 @@ public class BorrowService {
 
         List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
         for (Integer equipmentId : request.getEquipmentIds()) {
-            Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow();
-            equipment.setEquipmentStatus(equipmentStatusRepository.findById(2).orElseThrow());
+            Equipment equipment = equipmentRepository.findById(equipmentId)
+                    .orElseThrow(() -> new EntityNotFoundException("Equipment not found id: " + equipmentId));
+
+            equipment.setEquipmentStatus(equipmentStatusRepository.findById(2)
+                    .orElseThrow(() -> new EntityNotFoundException("Status not found")));
             equipmentRepository.save(equipment);
 
             BorrowEquipment borrowEquipment = new BorrowEquipment();
