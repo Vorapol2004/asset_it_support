@@ -13,139 +13,128 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
     @Query(value = """
-                SELECT
-                    e.id AS employee_id,
-                    e.first_name,
-                    e.last_name,
-                    e.email,
-                    e.phone,
-                    e.description,
+               SELECT
+                   e.id AS employee_id,
+                   e.first_name,
+                   e.last_name,
+                   e.email,
+                   e.phone,
+                   e.description,
+                   e.department_id,
+                   d.department_name,
+                   e.role_id,
+                   r.role_name,
+                   b.building_name,
+                   f.floor_name,
+                   r.role_name,
+                   COUNT(br.id) AS borrow_count
             
-                    e.department_id,
-                    d.department_name,
-            
-                    e.role_id,
-                    r.role_name
-            
-                FROM
-                    employee e
-                LEFT JOIN department d ON
-                    d.id = e.department_id
-                LEFT JOIN role r ON
-                    r.id = e.role_id
+               FROM
+                   employee e
+               LEFT JOIN department d ON e.department_id = d.id
+               LEFT JOIN role r ON e.role_id = r.id
+               LEFT JOIN room rm ON e.room_id = rm.id
+               LEFT JOIN floor f ON rm.floor_id = f.id
+               LEFT JOIN building b ON f.building_id = b.id
+               LEFT JOIN borrow br ON br.employee_id = e.id
+               GROUP BY
+                   e.id,
+                   e.first_name,
+                   e.last_name,
+                   e.email,
+                   e.phone,
+                   e.description,
+                   e.department_id,
+                   d.department_name,
+                   e.role_id,
+                   r.role_name,
+                   b.building_name,
+                   f.floor_name,
+                   rm.room_name;
             """, nativeQuery = true)
     List<EmployeeView> findAllEmployee();
 
-
-    //ดึงข้อมูล employee เฉพาะ role นั้นๆโดยเฉพาะ
     @Query(value = """
-                SELECT
-                    e.id AS employee_id,
-                    e.first_name,
-                    e.last_name,
-                    e.email,
-                    e.phone,
-                    e.description,
-            
-                    e.department_id,
-                    d.department_name,
-            
-                    e.role_id,
-                    r.role_name
-                FROM
-                    `employee` e
-                LEFT JOIN
-                	role r ON r.id = e.role_id
-                WHERE
-                 	r.id = :EmployeeRoleId
+               SELECT
+                   e.id AS employee_id,
+                   e.first_name,
+                   e.last_name,
+                   e.email,
+                   e.phone,
+                   e.description,
+                   e.department_id,
+                   d.department_name,
+                   e.role_id,
+                   r.role_name,
+                   b.building_name,
+                   f.floor_name,
+                   r.role_name,
+                   rm.room_name
+               FROM
+                   employee e
+               LEFT JOIN department d ON e.department_id = d.id
+               LEFT JOIN role r ON e.role_id = r.id
+               LEFT JOIN room rm ON e.room_id = rm.id
+               LEFT JOIN floor f ON rm.floor_id = f.id
+               LEFT JOIN building b ON f.building_id = b.id
+               WHERE
+                   e.id = :employeeId;
             """, nativeQuery = true)
-    List<EmployeeView> ChooseEmployeeRoles(@Param("roleId") Integer EmployeeRoleId);
-
-
-    //ดึงข้อมูล employee เฉพาะ department นั้นๆโดยเฉพาะ
-    @Query(value = """
-                SELECT
-                	e.id AS employee_id,
-                    e.first_name,
-                    e.last_name,
-                    e.email,
-                    e.phone,
-                    e.description,
-            
-                    e.department_id,
-                    d.department_name,
-            
-                    e.role_id,
-                    r.role_name
-                FROM
-                    `employee` e
-                LEFT JOIN
-                	department d ON d.id = e.department_id
-                WHERE
-                 	d.id = :EmployeeDepartmentId
-            """, nativeQuery = true)
-    List<EmployeeView> ChooseEmployeeDepartments(@Param("departmentId") Integer EmployeeDepartmentId);
-
-
-    //ดึงข้อมูลรายชื่อ employee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
-    @Query(value = """
-                SELECT
-                    e.id AS employee_id,
-                    e.first_name,
-                    e.last_name,
-                    e.email,
-                    e.phone,
-                    e.description,
-            
-                    e.department_id,
-                    d.department_name,
-            
-                    e.role_id,
-                    r.role_name
-                FROM
-                    `employee` e
-                LEFT JOIN
-                	department d ON  d.id = e.department_id
-                LEFT JOIN
-                    role r ON r.id = e.role_id
-                WHERE
-                    d.id = :EmployeeDepartmentId
-                    AND r.id = :EmployeeRoleId
-            """, nativeQuery = true)
-    List<EmployeeView> ChooseEmployeeDepartmentAndRole(
-            @Param("descriptionId") Integer EmployeeDepartmentId,
-            @Param("roleId") Integer EmployeeRoleId);
+    EmployeeView selectOldEmployee(@Param("employeeId") Integer employeeId);
 
 
     //ค้นหาชื่อ employee ด้วย keyword
     @Query(value = """
             
                     SELECT
-                    e.id AS employee_id,
-                    e.first_name,
-                    e.last_name,
-                    e.email,
-                    e.phone,
-                    e.description,
-            
-                    e.department_id,
-                    d.department_name,
-            
-                    e.role_id,
-                    r.role_name
+                        e.id AS employee_id,
+                        e.first_name,
+                        e.last_name,
+                        e.email,
+                        e.phone,
+                        e.description,
+                        e.department_id,
+                        d.department_name,
+                        e.role_id,
+                        r.role_name,
+                        b.building_name,
+                        f.floor_name,
+                        r.role_name,
+                        COUNT(br.id) AS borrow_count
                     FROM
                         employee e
-                    LEFT JOIN
-                        department d ON d.id = e.department_id
-                    LEFT JOIN
-                        role r ON r.id = e.role_id
+                    LEFT JOIN department d ON
+                        e.department_id = d.id
+                    LEFT JOIN role r ON
+                        e.role_id = r.id
+                    LEFT JOIN room rm ON
+                        e.room_id = rm.id
+                    LEFT JOIN FLOOR f ON
+                        rm.floor_id = f.id
+                    LEFT JOIN building b ON
+                        f.building_id = b.id
+                    LEFT JOIN borrow br ON
+                        br.employee_id = e.id
                     WHERE
-                        (
                         e.first_name LIKE CONCAT('%', :keyword, '%')
                         OR e.last_name LIKE CONCAT('%', :keyword, '%')
                         OR e.email LIKE CONCAT('%', :keyword, '%')
+                        OR e.phone LIKE CONCAT('%', :keyword, '%')
                         OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
-                        )
+                    GROUP BY
+                        e.id,
+                        e.first_name,
+                        e.last_name,
+                        e.email,
+                        e.phone,
+                        e.description,
+                        e.department_id,
+                        d.department_name,
+                        e.role_id,
+                        r.role_name,
+                        b.building_name,
+                        f.floor_name,
+                        rm.room_name;
             """, nativeQuery = true)
     List<EmployeeView> searchEmployeeKeyword(
             @Param("keyword") String keyword);

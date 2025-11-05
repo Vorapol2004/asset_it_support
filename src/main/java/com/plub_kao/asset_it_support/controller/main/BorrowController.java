@@ -42,11 +42,6 @@ public class BorrowController {
 
     }
 
-    @GetMapping("/employeeRole/dropdown")
-    public List<Role> findEmployeeRoleDropdown() {
-        return employeeService.findAllRole();
-    }
-
 
     //เรียกดูประวัติการยืมของ Borrow ทั้งหมด
     @GetMapping("/all")

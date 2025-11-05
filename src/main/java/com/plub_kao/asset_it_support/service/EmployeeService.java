@@ -16,10 +16,12 @@ import com.plub_kao.asset_it_support.repository.EmployeeRepository;
 import com.plub_kao.asset_it_support.repository.RoleRepository;
 import com.plub_kao.asset_it_support.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,45 +37,30 @@ public class EmployeeService {
     private final RoomRepository roomRepository;
 
 
-    //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
-    public List<EmployeeView> findAll() {
-        List<EmployeeView> employees = employeeRepository.findAllEmployee();
-        return employees;
-    }
-
-    public List<Role> findAllRole() {
-        return roleRepository.findAll();
+    public List<EmployeeView> findAllEmployee() {
+        List<EmployeeView> employeeViews = employeeRepository.findAllEmployee();
+        return employeeViews;
     }
 
 
-    //ดึงข้อมูลรายชื่อ employee เฉพาะ role นั้นโดยเฉพาะออกมาทั้งหมด
-    public List<EmployeeView> ChooseEmployeeRoles(@Param("EmployeeRoleId") Integer EmployeeRoleId) {
-        List<EmployeeView> employees = employeeRepository.ChooseEmployeeRoles(EmployeeRoleId);
-        return employees;
-    }
-
-
-    //ดึงข้อมูลรายขื่อ employee เฉพาะ department นั้นโดยเฉพาะออกมาทั้งหมด
-    public List<EmployeeView> ChooseEmployeeDepartments(@Param("EmployeeDepartmentId") Integer EmployeeDepartmentId) {
-        List<EmployeeView> employees = employeeRepository.ChooseEmployeeDepartments(EmployeeDepartmentId);
-        return employees;
-    }
-
-
-    //ดึงข้อมูลรายชื่อ employee ฟิตเตอร์ที่มีตำแหน่ง role และ department ออกมาทั้งหมด
-    public List<EmployeeView> ChooseEmployeeDepartmentAndRole(@Param("EmployeeDepartmentId") Integer EmployeeDepartmentId,
-                                                              @Param("EmployeeRoleId") Integer EmployeeRoleId) {
-        List<EmployeeView> employees = employeeRepository.ChooseEmployeeDepartmentAndRole(EmployeeDepartmentId, EmployeeRoleId);
-        return employees;
-    }
-
-    // ค้นหารายชื่อ employee ด้วย keyword ของชื่อ
-    public List<EmployeeView> searchEmployeeKeyword(@Param("keyword") String keyword) {
-        // ถ้า keyword เป็น null ให้ใส่ค่าว่างไว้ จะได้ค้นหาได้หมด
-        if (keyword == null) {
-            keyword = "";
+    public List<EmployeeView> searchEmployeeKeyword(@RequestParam String keyword) {
+        try {
+            List<EmployeeView> employeeViews = employeeRepository.searchEmployeeKeyword(keyword);
+            return employeeViews;
+        } catch (Exception e) {
+            throw new RuntimeException("พัง", e);
         }
-        return employeeRepository.searchEmployeeKeyword(keyword);
+
+    }
+
+    public EmployeeView SearchEmployeeById(@RequestParam Integer employeeId) {
+        try {
+            EmployeeView employeeView = employeeRepository.selectOldEmployee(employeeId);
+            return employeeView;
+        } catch (Exception e) {
+            throw new RuntimeException("พัง", e);
+        }
+
     }
 
     @Transactional

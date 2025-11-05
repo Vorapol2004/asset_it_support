@@ -4,7 +4,11 @@ public interface EmployeeView {
 
     Integer getId();
 
-    String getEmployeeName();
+    Integer getEmployeeId();
+
+    String getFirstName();
+
+    String getLastName();
 
     String getEmail();
 
@@ -19,6 +23,14 @@ public interface EmployeeView {
     Integer getRoleId();
 
     String getRoleName();
+
+    String getBuildingName();
+
+    String getFloorName();
+
+    String getRoomName();
+
+    Integer getBorrowCount();
 
 
 }
