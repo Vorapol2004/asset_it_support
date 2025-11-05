@@ -150,7 +150,11 @@ public class BorrowService {
         borrowEquipment.setReturnDate(request.getReturnDate());
         borrowEquipmentRepository.save(borrowEquipment);
 
-        //change borrow status
+        Borrow borrow = borrowEquipment.getBorrow();
+        BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
+        borrow.setBorrowStatus(borrowStatus);
+        borrowRepository.save(borrow);
+
         return "returned successfully";
     }
 }
