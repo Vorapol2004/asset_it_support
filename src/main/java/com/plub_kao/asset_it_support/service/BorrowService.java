@@ -1,33 +1,25 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
-import com.plub_kao.asset_it_support.entity.BorrowStatus;
-import com.plub_kao.asset_it_support.entity.employee.EmployeeRequest;
-import com.plub_kao.asset_it_support.entity.employee.view.EmployeeView;
-import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
-import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
-import com.plub_kao.asset_it_support.entity.role.Role;
+import com.plub_kao.asset_it_support.entity.borrowStatus.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowRequest;
 import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 
-import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
-import com.plub_kao.asset_it_support.entity.room.RoomView;
+import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -43,15 +35,12 @@ public class BorrowService {
 
     private final EmployeeRepository employeeRepository;
 
-    private final BorrowEquipmentRepository borrowEquipmentRepository;
-
-    private final EmployeeService employeeService;
 
     private final EquipmentStatusRepository equipmentStatusRepository;
 
-    private final DepartmentRepository departmentRepository;
 
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+    private final BorrowStatusService borrowStatusService;
 
 
     @Transactional
@@ -61,24 +50,35 @@ public class BorrowService {
     }
 
 
-    //เรียกดูประวัติการยืมของ Borrow ทั้งหมด
-    public List<BorrowView> getAllBorrowedEmployeeId() {
-        List<BorrowView> borrowAll = borrowRepository.getAllBorrowedEmployeeId();
-        return borrowAll;
+    public List<BorrowView> findAllBorrowed() {
+        try {
+            List<BorrowView> borrowViews = borrowRepository.findAllBorrow();
+            return borrowViews;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
-    //ฟิลเตอร์ Status ของ Borrow ออกมาทั้งหมด
-    public List<BorrowView> filterBorrowStatus(@Param("borrowStatusId") Integer borrowStatusId) {
-        List<BorrowView> borrowAll = borrowRepository.filterBorrowStatus(borrowStatusId);
-        return borrowAll;
-    }
-
-    //license_key และ serial_number
     public List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword) {
-        List<BorrowView> borrowAll = borrowRepository.searchBorrowEquipment(keyword);
-        return borrowRepository.searchBorrowEquipment(keyword);
+        List<BorrowView> borrowViews = borrowRepository.searchBorrowEquipment(keyword);
+        return borrowViews;
     }
+
+
+//    public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
+//                                                @RequestParam Integer roleId) {
+//        if (borrowStatusId != null && roleId == null) {
+//            return borrowStatusService.findAll(borrowStatusId);
+//        }
+//        if (borrowStatusId == null && roleId != null) {
+//            return roleService.findAll(roleId);
+//        }
+//        if (borrowStatusId != null && roleId != null) {
+//            return borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
+//        }
+//        return borrowRepository.findAllBorrow();
+//    }
 
 
     @Transactional

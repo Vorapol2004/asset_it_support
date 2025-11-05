@@ -25,7 +25,7 @@ public class RoleController {
     @GetMapping("/filter")
     public ResponseEntity<List<RoleView>> findAllRoles() {
         List<RoleView> roles = roleService.findAll();
-        if (roles == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT); //กรณีค่า roloes เป็น null
+        if (roles == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return ResponseEntity.ok(roles);
     }
 }

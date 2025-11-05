@@ -23,16 +23,10 @@ import java.util.List;
 @RequestMapping("/borrow")
 public class BorrowController {
 
-    @Autowired
-    private BorrowService borrowService;
-    @Autowired
-    private BorrowRepository borrowRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private EquipmentService equipmentService;
+
+    private final BorrowService borrowService;
+
+    private final BorrowRepository borrowRepository;
 
 
     @GetMapping("/update-overdue")
@@ -43,29 +37,13 @@ public class BorrowController {
     }
 
 
-    //เรียกดูประวัติการยืมของ Borrow ทั้งหมด
     @GetMapping("/all")
-    public ResponseEntity<List<BorrowView>> getAllBorrowedEmployeeIds() {
-        List<BorrowView> borrowAll = borrowService.getAllBorrowedEmployeeId();
-        if (borrowAll.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.ok(borrowAll);
+    public ResponseEntity<List<BorrowView>> getAllBorrowed() {
+        List<BorrowView> borrowViews = borrowService.findAllBorrowed();
+        return new ResponseEntity<>(borrowViews, HttpStatus.OK);
     }
 
 
-    //ฟิลเตอร์ Status ของ Borrow ออกมาทั้งหมด
-    @GetMapping("/filter/Status/{id}")
-    public ResponseEntity<List<BorrowView>> filterBorrowStatus(@PathVariable Integer id) {
-        List<BorrowView> borrowALll = borrowService.filterBorrowStatus(id);
-        if (borrowALll.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.ok(borrowALll);
-
-    }
-
-    //ค้นหาประวัติการยืมอุปกรณ์แต่ละชนิด จาก license_key และ serial_number
     @GetMapping("/search")
     public ResponseEntity<List<BorrowView>> searchBorrowEquipment(@RequestParam String keyword) {
         List<BorrowView> borrowALll = borrowService.searchBorrowEquipment(keyword);
@@ -89,8 +67,5 @@ public class BorrowController {
         }
     }
 
-//    @PostMapping("/add")
-//    public BorrowResponse NewBorrow(@RequestBody NewBorrow newBorrow) {
-//        return borrowService.newBorrow(newBorrow);
-//    }
+
 }

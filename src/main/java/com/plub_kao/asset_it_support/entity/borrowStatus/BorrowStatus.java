@@ -1,4 +1,4 @@
-package com.plub_kao.asset_it_support.entity;
+package com.plub_kao.asset_it_support.entity.borrowStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

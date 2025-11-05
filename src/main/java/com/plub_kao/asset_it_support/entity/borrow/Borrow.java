@@ -2,7 +2,7 @@ package com.plub_kao.asset_it_support.entity.borrow;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
-import com.plub_kao.asset_it_support.entity.BorrowStatus;
+import com.plub_kao.asset_it_support.entity.borrowStatus.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class Borrow {
     @Column(name = "reference_doc")
     private String referenceDoc;
 
- 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "borrow_status_id", nullable = false)
     private BorrowStatus borrowStatus;
