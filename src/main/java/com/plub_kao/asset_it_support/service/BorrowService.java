@@ -12,6 +12,7 @@ import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BorrowService {
@@ -66,37 +67,42 @@ public class BorrowService {
     }
 
 
-//    public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
-//                                                @RequestParam Integer roleId) {
-//        if (borrowStatusId != null && roleId == null) {
-//            return borrowStatusService.findAll(borrowStatusId);
-//        }
-//        if (borrowStatusId == null && roleId != null) {
-//            return roleService.findAll(roleId);
-//        }
-//        if (borrowStatusId != null && roleId != null) {
-//            return borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
-//        }
-//        return borrowRepository.findAllBorrow();
-//    }
+    public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
+                                                @RequestParam Integer roleId) {
+        if (borrowStatusId != null && roleId == null) {
+            return borrowStatusService.FilterBorrowStatus(borrowStatusId);
+        }
+        if (borrowStatusId == null && roleId != null) {
+            return roleService.FilterBorrowStatus(roleId);
+        }
+        if (borrowStatusId != null && roleId != null) {
+            return borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
+        }
+        return borrowRepository.findAllBorrow();
+    }
 
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {
-        Employee employee = employeeRepository.findById(request.getEmployeeId()).orElseThrow();
+        log.info("Create Borrow Request1: {}", request);
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
-        BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
+        BorrowStatus borrowStatus = borrowStatusRepository.findById(1)
+                .orElseThrow(() -> new IllegalArgumentException("BorrowStatus not found"));
 
         Borrow borrow = new Borrow();
         borrow.setEmployee(employee);
         borrow.setBorrowStatus(borrowStatus);
         borrow.setBorrowDate(request.getBorrowDate());
         borrow.setReferenceDoc(request.getReferenceDoc());
-
+        log.info("Create Borrow Request2: {}", request);
         List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
         for (Integer equipmentId : request.getEquipmentIds()) {
-            Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow();
-            equipment.setEquipmentStatus(equipmentStatusRepository.findById(2).orElseThrow());
+            Equipment equipment = equipmentRepository.findById(equipmentId)
+                    .orElseThrow(() -> new IllegalArgumentException(" equipment " + equipmentId));
+            equipment.setEquipmentStatus(equipmentStatusRepository.findById(2)
+                    .orElseThrow(() -> new IllegalArgumentException(" equipment " + equipmentId)));
             equipmentRepository.save(equipment);
 
             BorrowEquipment borrowEquipment = new BorrowEquipment();
@@ -105,10 +111,11 @@ public class BorrowService {
             borrowEquipment.setBorrow(borrow);
 
             borrowEquipmentList.add(borrowEquipment);
+            log.info("add equipmentList : {}", request.getEquipmentIds());
         }
 
         borrow.setBorrowEquipments(borrowEquipmentList);
-
+        log.info("Create Borrow Request3: {}", request);
         return createBorrowResponse(borrowRepository.save(borrow));
     }
 

@@ -16,7 +16,6 @@ import java.util.Map;
 public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 
 
-    //ค้นหาประวัติการยืมอุปกรณ์แต่ละชนิด จาก license_key และ serial_number
     @Query(value = """
             SELECT
                 b.id,
@@ -28,6 +27,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 b.borrow_date,
                 be.due_date,
                 bs.borrow_status_name
+            
             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
@@ -63,6 +63,105 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             """, nativeQuery = true)
     List<BorrowView> findAllBorrow();
 
+
+    @Query(value = """
+            SELECT
+                b.id,
+                e.first_name,
+                e.last_name,
+                e.email,
+                e.phone,
+                r.role_name,
+                b.borrow_date,
+                be.due_date,
+                bs.borrow_status_name
+            FROM
+                `borrow` b
+            LEFT JOIN borrow_equipment be ON
+                be.borrow_id = b.id
+            LEFT JOIN borrow_status bs ON
+                bs.id = b.borrow_status_id
+            LEFT JOIN equipment eq ON
+                eq.id = be.equipment_id
+            LEFT JOIN equipment_type eqt ON
+                eqt.id = eq.equipment_type_id
+            LEFT JOIN equipment_status eqs ON
+                eqs.id = eq.equipment_status_id
+            LEFT JOIN employee e ON
+                e.id = b.employee_id
+            LEFT JOIN department d ON
+                d.id = e.department_id
+            LEFT JOIN role r ON
+                r.id = e.role_id
+            
+            WHERE
+                e.role_id = :roleId
+            GROUP BY
+            	b.id,
+                e.first_name,
+                e.last_name,
+                r.role_name,
+                b.borrow_date,
+                e.email,
+                bs.borrow_status_name
+            ORDER BY
+                b.borrow_date DESC;
+            
+            
+            
+            """, nativeQuery = true)
+    List<BorrowView> FilterRole(@Param("roleId") int id);
+
+
+    @Query(value = """
+            SELECT
+                b.id,
+                e.first_name,
+                e.last_name,
+                e.email,
+                e.phone,
+                r.role_name,
+                b.borrow_date,
+                be.due_date,
+                bs.borrow_status_name
+            FROM
+                `borrow` b
+            LEFT JOIN borrow_equipment be ON
+                be.borrow_id = b.id
+            LEFT JOIN borrow_status bs ON
+                bs.id = b.borrow_status_id
+            LEFT JOIN equipment eq ON
+                eq.id = be.equipment_id
+            LEFT JOIN equipment_type eqt ON
+                eqt.id = eq.equipment_type_id
+            LEFT JOIN equipment_status eqs ON
+                eqs.id = eq.equipment_status_id
+            LEFT JOIN employee e ON
+                e.id = b.employee_id
+            LEFT JOIN department d ON
+                d.id = e.department_id
+            LEFT JOIN role r ON
+                r.id = e.role_id
+            
+            WHERE
+                 b.borrow_status_id = :borrowStatusId
+            GROUP BY
+            	b.id,
+                e.first_name,
+                e.last_name,
+                r.role_name,
+                b.borrow_date,
+                e.email,
+                bs.borrow_status_name
+            ORDER BY
+                b.borrow_date DESC;
+            
+            
+            
+            """, nativeQuery = true)
+    List<BorrowView> FilterBorrowStatus(@Param("borrowStatusId") int id);
+
+
     @Query(value = """
              SELECT
                 b.id,
@@ -94,8 +193,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 r.id = e.role_id
             
              WHERE
-               (:borrowStatusId IS NULL OR bs.borrow_status_id = :borrowStatusId)
-                AND (:roleId IS NULL OR r.role_id = :roleId)
+               (:borrowStatusId IS NULL OR b.borrow_status_id = :borrowStatusId)
+                AND (:roleId IS NULL OR e.role_id = :roleId)
             
             GROUP BY
             	b.id,

@@ -18,7 +18,7 @@ public class Room {
     @Column(name = "room_name", nullable = false, length = 100)
     private String roomName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 

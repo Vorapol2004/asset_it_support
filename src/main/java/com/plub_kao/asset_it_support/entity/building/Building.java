@@ -18,7 +18,7 @@ public class Building {
     @Column(name = "building_name", nullable = false, length = 50)
     private String buildingName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
 

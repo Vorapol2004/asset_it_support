@@ -39,7 +39,7 @@ public class Lot {
     @Column(name = "expire_date")
     private LocalDate expireDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lot_type_id", nullable = false)
     private LotType lotType;
 

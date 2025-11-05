@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.controller.main;
 
+import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowRequest;
@@ -41,6 +42,15 @@ public class BorrowController {
     public ResponseEntity<List<BorrowView>> getAllBorrowed() {
         List<BorrowView> borrowViews = borrowService.findAllBorrowed();
         return new ResponseEntity<>(borrowViews, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<BorrowView>> filter(
+            @RequestParam(required = false) Integer borrowStatusId,
+            @RequestParam(required = false) Integer roleId
+    ) {
+        List<BorrowView> BorrowView = borrowService.filterStatusAndRole(borrowStatusId, roleId);
+        return ResponseEntity.ok(BorrowView);
     }
 
 

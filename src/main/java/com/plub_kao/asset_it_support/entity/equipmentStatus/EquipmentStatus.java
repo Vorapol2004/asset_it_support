@@ -20,7 +20,7 @@ public class EquipmentStatus {
     @Column(name = "equipment_status_name", nullable = false, length = 100)
     private String equipmentStatusName;
 
-    @OneToMany(mappedBy = "equipmentStatus", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "equipmentStatus", fetch = FetchType.EAGER)
     private List<Equipment> equipments;
 
 

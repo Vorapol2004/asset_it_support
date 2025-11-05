@@ -24,7 +24,7 @@ public class Borrow {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "employee_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Employee employee;
@@ -37,7 +37,7 @@ public class Borrow {
     private String referenceDoc;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "borrow_status_id", nullable = false)
     private BorrowStatus borrowStatus;
 

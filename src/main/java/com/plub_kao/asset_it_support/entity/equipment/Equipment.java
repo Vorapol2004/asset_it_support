@@ -30,15 +30,15 @@ public class Equipment {
     @Column(name = "serial_number", length = 100)
     private String serialNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "equipment_status_id", nullable = false)
     private EquipmentStatus equipmentStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "equipment_type_id")
     private EquipmentType equipmentType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "lot_id", nullable = false)
     @JsonBackReference
     private Lot lot;

@@ -25,12 +25,12 @@ public class BorrowEquipment {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "equipment_id", nullable = false)
     private Equipment equipment;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "borrow_id")
     private Borrow borrow;
 
