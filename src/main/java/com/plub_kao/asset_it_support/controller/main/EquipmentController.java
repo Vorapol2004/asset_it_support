@@ -29,7 +29,7 @@ public class EquipmentController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<EquipmentView>> searchEquipmentKeyword(@RequestParam String keyword) {
+    public ResponseEntity<List<EquipmentView>> searchEquipmentKeyword(String keyword) {
         List<EquipmentView> equipment = equipmentService.searchEquipmentKeyword(keyword);
         return ResponseEntity.ok(equipment);
     }
