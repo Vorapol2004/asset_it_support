@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,18 +65,25 @@ public class BorrowController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BorrowResponse> createBorrow(@RequestBody BorrowRequest request) {
+    public ResponseEntity<?> createBorrow(@RequestBody BorrowRequest request) {
         try {
             BorrowResponse response = borrowService.createBorrow(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             // ถ้ามี error เช่น อุปกรณ์ไม่พร้อม หรือไม่พบผู้ยืม
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             // error อื่น ๆ
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
-
+    @PatchMapping("/return")
+    public ResponseEntity<String> returnBorrow(@RequestBody ReturnRequest request) {
+        return ResponseEntity.ok(borrowService.returnEquipment(request));
+    }
 }

@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.service;
 
+import com.plub_kao.asset_it_support.controller.main.ReturnRequest;
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
 import com.plub_kao.asset_it_support.entity.borrowStatus.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
@@ -36,12 +37,12 @@ public class BorrowService {
 
     private final EmployeeRepository employeeRepository;
 
-
     private final EquipmentStatusRepository equipmentStatusRepository;
 
 
     private final RoleService roleService;
     private final BorrowStatusService borrowStatusService;
+    private final BorrowEquipmentRepository borrowEquipmentRepository;
 
 
     @Transactional
@@ -140,4 +141,16 @@ public class BorrowService {
     }
 
 
+    public String returnEquipment(ReturnRequest request) {
+        Equipment equipment = equipmentRepository.findById(request.getEquipmentId()).orElseThrow();
+        equipment.setEquipmentStatus(equipmentStatusRepository.findById(request.getStatusId()).orElseThrow());
+        equipmentRepository.save(equipment);
+
+        BorrowEquipment borrowEquipment = borrowEquipmentRepository.findById(request.getBorrowerEquipmentId()).orElseThrow();
+        borrowEquipment.setReturnDate(request.getReturnDate());
+        borrowEquipmentRepository.save(borrowEquipment);
+
+        //change borrow status
+        return "returned successfully";
+    }
 }
