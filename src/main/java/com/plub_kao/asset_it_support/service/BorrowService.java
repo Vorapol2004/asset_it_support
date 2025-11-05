@@ -151,7 +151,15 @@ public class BorrowService {
         borrowEquipmentRepository.save(borrowEquipment);
 
         Borrow borrow = borrowEquipment.getBorrow();
-        BorrowStatus borrowStatus = borrowStatusRepository.findById(1).orElseThrow();
+        Boolean allReturned = true;
+        for (BorrowEquipment be : borrow.getBorrowEquipments()) {
+            if (be.getReturnDate() == null) {
+                allReturned = false;
+                break;
+            }
+        }
+
+        BorrowStatus borrowStatus = borrowStatusRepository.findById(allReturned ? 2 : 3).orElseThrow();
         borrow.setBorrowStatus(borrowStatus);
         borrowRepository.save(borrow);
 
