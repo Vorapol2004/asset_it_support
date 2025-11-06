@@ -18,6 +18,8 @@ public interface BorrowView {
 
     String getRoleName();
 
+    Integer getBorrowEquipmentCount();
+
     LocalDate getBorrowDate();
 
     LocalDate getDueDate();
