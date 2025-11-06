@@ -16,7 +16,7 @@ public interface BorrowView {
 
     String getPhone();
 
-    String getRole();
+    String getRoleName();
 
     LocalDate getBorrowDate();
 

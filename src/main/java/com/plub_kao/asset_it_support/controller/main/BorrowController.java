@@ -55,7 +55,7 @@ public class BorrowController {
     }
 
     @GetMapping("/select")
-    public ResponseEntity<List<BorrowView>> selectBorrow(Integer borrowId) {
+    public ResponseEntity<List<BorrowView>> selectBorrow(@RequestParam Integer borrowId) {
         List<BorrowView> borrow = borrowService.selectBorrowId(borrowId);
         return ResponseEntity.ok(borrow);
     }
