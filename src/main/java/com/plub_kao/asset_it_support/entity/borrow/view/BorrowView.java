@@ -20,6 +20,8 @@ public interface BorrowView {
 
     LocalDate getDueDate();
 
+    String getApproverName();
+
     String getBorrowStatusName();
 
     Integer getBorrowId();
