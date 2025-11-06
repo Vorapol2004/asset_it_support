@@ -265,6 +265,56 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword);
 
 
+    @Query(value = """
+            SELECT
+                b.id,
+                d.department_name,
+                e.first_name,
+                e.last_name,
+                e.phone,
+                e.email,
+                r.role_name,
+                b.borrow_date,
+                b.reference_doc,
+                beq.due_date,
+                beq.return_date,
+                beq.equipment_id,
+                eq.id AS equipment_id,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.license_key,
+                eq.serial_number,
+                bs.borrow_status_name,
+                eqt.equipment_type_name
+            
+            
+            FROM
+                borrow b
+            LEFT JOIN
+                employee e ON e.id = b.employee_id
+            LEFT JOIN
+                role r ON r.id = e.id
+            LEFT JOIN
+                borrow_equipment beq ON beq.borrow_id = b.id
+            LEFT JOIN
+                borrow_status bs ON b.borrow_status_id = bs.id
+            LEFT JOIN
+                equipment eq ON beq.equipment_id = eq.id
+            LEFT JOIN
+                equipment_type eqt ON eq.equipment_type_id = eqt.id
+            JOIN
+            	department d ON e.department_id = d.id
+            
+            WHERE
+                b.id = :borrowId;
+            
+            
+            
+            """, nativeQuery = true)
+    List<BorrowView> selectBorrow(@Param("borrowId") Integer borrowId);
+
+
     //check due_date < current  borrowed change overdue
     @Modifying
     @Transactional

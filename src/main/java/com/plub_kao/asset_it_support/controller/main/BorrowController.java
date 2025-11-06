@@ -54,6 +54,12 @@ public class BorrowController {
         return ResponseEntity.ok(BorrowView);
     }
 
+    @GetMapping("/select")
+    public ResponseEntity<List<BorrowView>> selectBorrow(Integer borrowId) {
+        List<BorrowView> borrow = borrowService.selectBorrowId(borrowId);
+        return ResponseEntity.ok(borrow);
+    }
+
 
     @GetMapping("/search")
     public ResponseEntity<List<BorrowView>> searchBorrowEquipment(@RequestParam String keyword) {
