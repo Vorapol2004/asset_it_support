@@ -67,6 +67,17 @@ public class BorrowService {
     }
 
 
+    public List<BorrowView> selectBorrowId(@RequestParam Integer borrowId) {
+        try {
+            List<BorrowView> borrowViews = borrowRepository.selectBorrow(borrowId);
+            return borrowViews;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
     public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
                                                 @RequestParam Integer roleId) {
         if (borrowStatusId != null && roleId == null) {
