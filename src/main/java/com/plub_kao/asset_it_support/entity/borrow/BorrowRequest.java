@@ -16,6 +16,7 @@ public class BorrowRequest {
     private String referenceDoc;
     private LocalDate borrowDate;
     private LocalDate dueDate;
+    private String approverName;
     private List<Integer> equipmentIds;
 
 

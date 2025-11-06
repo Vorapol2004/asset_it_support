@@ -17,6 +17,7 @@ public class BorrowResponse {
     private String employeeName;
     private String referenceDoc;
     private LocalDate borrowDate;
+    private String approverName;
     private List<EquipmentInfo> equipments;
 
     @Getter

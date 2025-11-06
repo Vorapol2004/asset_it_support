@@ -9,7 +9,7 @@ import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
-import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
+
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,6 +95,7 @@ public class BorrowService {
         borrow.setEmployee(employee);
         borrow.setBorrowStatus(borrowStatus);
         borrow.setBorrowDate(request.getBorrowDate());
+        borrow.setApproverName(request.getApproverName());
         borrow.setReferenceDoc(request.getReferenceDoc());
         log.info("Create Borrow Request2: {}", request);
         List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
