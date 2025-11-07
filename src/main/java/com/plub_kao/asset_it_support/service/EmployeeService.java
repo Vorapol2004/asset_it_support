@@ -92,7 +92,7 @@ public class EmployeeService {
 
     private EmployeeResponse createBorrowResponse(Employee savedEmployee) {
         EmployeeResponse response = new EmployeeResponse();
-        response.setEmployeeId(savedEmployee.getId());
+
         response.setFirstName(savedEmployee.getFirstName());
         response.setLastName(savedEmployee.getLastName());
         response.setEmail(savedEmployee.getEmail());
