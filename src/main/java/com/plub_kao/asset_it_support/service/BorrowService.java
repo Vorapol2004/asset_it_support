@@ -141,6 +141,7 @@ public class BorrowService {
 
         response.setReferenceDoc(savedBorrow.getReferenceDoc());
         response.setBorrowDate(savedBorrow.getBorrowDate());
+        response.setApproverName(savedBorrow.getApproverName());
         response.setEquipments(new ArrayList<>());
 
         List<BorrowEquipment> borrowEquipments = savedBorrow.getBorrowEquipments();
