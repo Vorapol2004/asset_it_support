@@ -11,6 +11,7 @@ import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.entity.employee.Employee;
 import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -155,13 +156,15 @@ public class BorrowService {
 
 
     public String returnEquipment(ReturnRequest request) {
-        Equipment equipment = equipmentRepository.findById(request.getBorrowerEquipmentId()).orElseThrow();
-        equipment.setEquipmentStatus(equipmentStatusRepository.findById(request.getStatusId()).orElseThrow());
-        equipmentRepository.save(equipment);
+
 
         BorrowEquipment borrowEquipment = borrowEquipmentRepository.findById(request.getBorrowerEquipmentId()).orElseThrow();
         borrowEquipment.setReturnDate(request.getReturnDate());
         borrowEquipmentRepository.save(borrowEquipment);
+
+        Equipment equipment = borrowEquipment.getEquipment();
+        equipment.setEquipmentStatus(equipmentStatusRepository.findById(request.getStatusId()).orElseThrow());
+        equipmentRepository.save(equipment);
 
         Borrow borrow = borrowEquipment.getBorrow();
         boolean allReturned = true;
