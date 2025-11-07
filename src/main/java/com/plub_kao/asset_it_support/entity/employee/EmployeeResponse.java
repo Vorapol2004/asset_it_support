@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmployeeResponse {
-    private Integer employeeId;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String phone;
