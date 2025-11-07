@@ -20,6 +20,8 @@ public interface BorrowView {
 
     String getReferenceDoc();
 
+    Integer getBorrowEquipmentId();
+
     String getApproverName();
 
     Integer getBorrowEquipmentCount();

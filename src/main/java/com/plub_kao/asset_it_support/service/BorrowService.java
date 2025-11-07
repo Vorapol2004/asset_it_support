@@ -155,7 +155,7 @@ public class BorrowService {
 
 
     public String returnEquipment(ReturnRequest request) {
-        Equipment equipment = equipmentRepository.findById(request.getEquipmentId()).orElseThrow();
+        Equipment equipment = equipmentRepository.findById(request.getBorrowerEquipmentId()).orElseThrow();
         equipment.setEquipmentStatus(equipmentStatusRepository.findById(request.getStatusId()).orElseThrow());
         equipmentRepository.save(equipment);
 

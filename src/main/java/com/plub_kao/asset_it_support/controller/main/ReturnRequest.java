@@ -7,7 +7,6 @@ import java.time.LocalDate;
 @Getter
 public class ReturnRequest {
     private Integer borrowerEquipmentId;
-    private Integer equipmentId;
     private Integer statusId;
     private LocalDate returnDate;
 }

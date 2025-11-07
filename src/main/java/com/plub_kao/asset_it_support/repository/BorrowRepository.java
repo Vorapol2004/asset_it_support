@@ -278,6 +278,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                     b.borrow_date,
                     b.approver_name,
                     b.reference_doc,
+                    beq.id AS borrow_equipment_id,
                     beq.due_date,
                     beq.return_date,
                     beq.equipment_id,
