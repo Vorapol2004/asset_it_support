@@ -291,12 +291,13 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                     eqt.equipment_type_name
             
             
+            
             FROM
                 borrow b
             LEFT JOIN
                 employee e ON e.id = b.employee_id
             LEFT JOIN
-                role r ON r.id = e.id
+                 role r ON e.role_id = r.id
             LEFT JOIN
                 borrow_equipment beq ON beq.borrow_id = b.id
             LEFT JOIN
@@ -310,6 +311,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             
             WHERE
                 b.id = :borrowId;
+            
             
             
             
