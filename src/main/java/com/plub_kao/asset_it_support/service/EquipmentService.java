@@ -1,7 +1,13 @@
 package com.plub_kao.asset_it_support.service;
 
 
+import com.plub_kao.asset_it_support.entity.employee.EmployeeResponse;
+import com.plub_kao.asset_it_support.entity.equipment.Equipment;
+import com.plub_kao.asset_it_support.entity.equipment.EquipmentResponse;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
+import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatus;
+import com.plub_kao.asset_it_support.entity.equipmentType.EquipmentType;
+import com.plub_kao.asset_it_support.entity.lot.LotRequest;
 import com.plub_kao.asset_it_support.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,8 @@ public class EquipmentService {
     private final EquipmentStatusService equipmentStatusService;
     private final EquipmentTypeService equipmentTypeService;
     private final BorrowEquipmentRepository borrowEquipmentRepository;
+    private final EquipmentTypeRepository equipmentTypeRepository;
+    private final EquipmentStatusRepository equipmentStatusRepository;
 
 
     public List<EquipmentView> findAll() {
@@ -91,6 +99,72 @@ public class EquipmentService {
         } catch (Exception e) {
             throw new RuntimeException("พัง", e);
         }
+
+    }
+
+    @Transactional
+    public EquipmentResponse editEquipment(LotRequest.EquipmentRequest equipmentRequest) {
+        Equipment equipment = equipmentRepository.findById(equipmentRequest.getEquipmentId())
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+        boolean isBorrowingNow = borrowEquipmentRepository.existsByEquipmentIdAndReturnDateIsNull(equipment.getId());
+
+        if (isBorrowingNow) {
+            throw new RuntimeException("Cannot update status. Equipment is currently borrowing.");
+        }
+
+        if (equipmentRequest.getEquipmentName() != null) {
+            equipment.setEquipmentName(equipmentRequest.getEquipmentName());
+        }
+        if (equipmentRequest.getBrand() != null) {
+            equipment.setBrand(equipmentRequest.getBrand());
+        }
+        if (equipmentRequest.getModel() != null) {
+            equipment.setModel(equipmentRequest.getModel());
+        }
+        if (equipmentRequest.getLicenseKey() != null) {
+            equipment.setLicenseKey(equipmentRequest.getLicenseKey());
+        }
+        if (equipmentRequest.getSerialNumber() != null) {
+            equipment.setSerialNumber(equipmentRequest.getSerialNumber());
+
+        }
+
+        if (equipmentRequest.getEquipmentTypeId() != null) {
+            EquipmentType equipmentType = equipmentTypeRepository.findById(equipmentRequest.getEquipmentTypeId())
+                    .orElseThrow(() -> new RuntimeException("EquipmentType not found"));
+            equipment.setEquipmentType(equipmentType);
+        }
+
+        if (equipmentRequest.getEquipmentStatusId() != null) {
+            EquipmentStatus equipmentStatus = equipmentStatusRepository.findById(equipmentRequest.getEquipmentStatusId())
+                    .orElseThrow(() -> new RuntimeException("EquipmentStatus not found"));
+            equipment.setEquipmentStatus(equipmentStatus);
+
+        }
+        equipmentRepository.save(equipment);
+
+        return createUndoEquipment(equipment);
+    }
+
+    private EquipmentResponse createUndoEquipment(Equipment saveEquipment) {
+        EquipmentResponse response = new EquipmentResponse();
+        response.setId(saveEquipment.getId());
+        response.setEquipmentName(saveEquipment.getEquipmentName());
+        response.setBrand(saveEquipment.getBrand());
+        response.setModel(saveEquipment.getModel());
+        response.setLicenseKey(saveEquipment.getLicenseKey());
+        response.setSerialNumber(saveEquipment.getSerialNumber());
+
+        if (saveEquipment.getEquipmentType() != null) {
+            response.setEquipmentTypeName(saveEquipment.getEquipmentType().getEquipmentTypeName());
+        }
+        if (saveEquipment.getEquipmentStatus() != null) {
+            response.setEquipmentStatusName(saveEquipment.getEquipmentStatus().getEquipmentStatusName());
+        }
+
+        return response;
+
 
     }
 

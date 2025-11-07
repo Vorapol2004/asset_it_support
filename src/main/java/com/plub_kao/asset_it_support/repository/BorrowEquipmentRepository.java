@@ -19,4 +19,7 @@ public interface BorrowEquipmentRepository extends JpaRepository<BorrowEquipment
             
             """, nativeQuery = true)
     int countByEquipmentId(Integer equipmentId);
+
+
+    boolean existsByEquipmentIdAndReturnDateIsNull(Integer equipmentId);
 }

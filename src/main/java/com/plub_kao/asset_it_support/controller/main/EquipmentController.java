@@ -1,6 +1,7 @@
 package com.plub_kao.asset_it_support.controller.main;
 
 
+import com.plub_kao.asset_it_support.entity.equipment.EquipmentResponse;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.lot.LotRequest;
 import com.plub_kao.asset_it_support.entity.lot.LotResponse;
@@ -74,6 +75,11 @@ public class EquipmentController {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<EquipmentResponse> editEquipment(@RequestBody LotRequest.EquipmentRequest request) {
+        return new ResponseEntity<>(equipmentService.editEquipment(request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

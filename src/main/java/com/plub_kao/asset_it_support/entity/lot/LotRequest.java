@@ -33,13 +33,15 @@ public class LotRequest {
     @Setter
     public static class EquipmentRequest {
 
+
+        private Integer equipmentId;
         private String equipmentName;
         private Integer equipmentTypeId;
         private String brand;
         private String model;
         private String serialNumber;
         private String licenseKey;
-
+        private Integer equipmentStatusId;
 
     }
 
