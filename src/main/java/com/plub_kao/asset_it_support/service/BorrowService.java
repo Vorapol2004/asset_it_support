@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -97,7 +99,20 @@ public class BorrowService {
 
     @Transactional
     public BorrowResponse createBorrow(BorrowRequest request) {
-        log.info("Create Borrow Request1: {}", request);
+
+        Set<Integer> unique = new HashSet<>(request.getEquipmentIds());
+        if (unique.size() != request.getEquipmentIds().size()) {
+            throw new IllegalArgumentException("มีอุปกรณ์ซ้ำในรายการ ไม่สามารถยืมซ้ำใน request เดียวกันได้");
+        }
+
+        List<Equipment> equipments = equipmentRepository.findAllById(request.getEquipmentIds());
+
+        for (Equipment eq : equipments) {
+            if (eq.getEquipmentStatus().getId() != 1) {
+                throw new IllegalArgumentException("Equipment id " + eq.getId() + " is not available to borrow.");
+            }
+        }
+
         Employee employee = employeeRepository.findById(request.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
@@ -110,11 +125,21 @@ public class BorrowService {
         borrow.setBorrowDate(request.getBorrowDate());
         borrow.setApproverName(request.getApproverName());
         borrow.setReferenceDoc(request.getReferenceDoc());
-        log.info("Create Borrow Request2: {}", request);
+
         List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
         for (Integer equipmentId : request.getEquipmentIds()) {
+
+
             Equipment equipment = equipmentRepository.findById(equipmentId)
                     .orElseThrow(() -> new IllegalArgumentException(" equipment " + equipmentId));
+
+
+            boolean isBorrowingNow = borrowEquipmentRepository.existsByEquipmentIdAndReturnDateIsNull(equipmentId);
+
+            if (isBorrowingNow) {
+                throw new IllegalArgumentException("อุปกรณ์ ID " + equipmentId + " กำลังถูกยืมอยู่ ไม่สามารถยืมซ้ำได้");
+            }
+
             equipment.setEquipmentStatus(equipmentStatusRepository.findById(2)
                     .orElseThrow(() -> new IllegalArgumentException(" equipment " + equipmentId)));
             equipmentRepository.save(equipment);
@@ -125,11 +150,10 @@ public class BorrowService {
             borrowEquipment.setBorrow(borrow);
 
             borrowEquipmentList.add(borrowEquipment);
-            log.info("add equipmentList : {}", request.getEquipmentIds());
         }
 
         borrow.setBorrowEquipments(borrowEquipmentList);
-        log.info("Create Borrow Request3: {}", request);
+
         return createBorrowResponse(borrowRepository.save(borrow));
     }
 

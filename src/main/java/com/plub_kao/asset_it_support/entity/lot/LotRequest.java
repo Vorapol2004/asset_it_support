@@ -32,8 +32,7 @@ public class LotRequest {
     @Getter
     @Setter
     public static class EquipmentRequest {
-
-
+        
         private Integer equipmentId;
         private String equipmentName;
         private Integer equipmentTypeId;
