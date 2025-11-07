@@ -268,26 +268,27 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 
     @Query(value = """
             SELECT
-                b.id,
-                d.department_name,
-                e.first_name,
-                e.last_name,
-                e.phone,
-                e.email,
-                r.role_name,
-                b.borrow_date,
-                b.reference_doc,
-                beq.due_date,
-                beq.return_date,
-                beq.equipment_id,
-                eq.id AS equipment_id,
-                eq.equipment_name,
-                eq.brand,
-                eq.model,
-                eq.license_key,
-                eq.serial_number,
-                bs.borrow_status_name,
-                eqt.equipment_type_name
+                 b.id,
+                    d.department_name,
+                    e.first_name,
+                    e.last_name,
+                    e.phone,
+                    e.email,
+                    r.role_name,
+                    b.borrow_date,
+                    b.approver_name,
+                    b.reference_doc,
+                    beq.due_date,
+                    beq.return_date,
+                    beq.equipment_id,
+                    eq.id AS equipment_id,
+                    eq.equipment_name,
+                    eq.brand,
+                    eq.model,
+                    eq.license_key,
+                    eq.serial_number,
+                    bs.borrow_status_name,
+                    eqt.equipment_type_name
             
             
             FROM

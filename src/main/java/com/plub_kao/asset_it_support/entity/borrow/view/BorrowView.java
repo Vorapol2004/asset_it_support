@@ -18,6 +18,10 @@ public interface BorrowView {
 
     String getRoleName();
 
+    String getReferenceDoc();
+
+    String getApproverName();
+
     Integer getBorrowEquipmentCount();
 
     LocalDate getBorrowDate();
