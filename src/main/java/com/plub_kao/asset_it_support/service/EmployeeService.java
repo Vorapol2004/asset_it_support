@@ -65,6 +65,10 @@ public class EmployeeService {
 
     @Transactional
     public EmployeeResponse addEmployee(EmployeeRequest request) {
+
+        if (employeeRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         Employee employee = new Employee();
         employee.setFirstName(request.getFirstName());
         employee.setLastName(request.getLastName());

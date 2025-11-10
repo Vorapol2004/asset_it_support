@@ -75,7 +75,9 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 r.role_name,
                 b.borrow_date,
                 be.due_date,
-                bs.borrow_status_name
+                bs.borrow_status_name,
+                COUNT(be.id) AS borrow_equipment_Count
+            
             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
@@ -124,7 +126,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 r.role_name,
                 b.borrow_date,
                 be.due_date,
-                bs.borrow_status_name
+                bs.borrow_status_name,
+                COUNT(be.id) AS borrow_equipment_Count
             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
@@ -173,7 +176,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 r.role_name,
                 b.borrow_date,
                 be.due_date,
-                bs.borrow_status_name
+                bs.borrow_status_name,
+                COUNT(be.id) AS borrow_equipment_Count
             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
@@ -223,7 +227,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 r.role_name,
                 b.borrow_date,
                 be.due_date,
-                bs.borrow_status_name
+                bs.borrow_status_name,
+                COUNT(be.id) AS borrow_equipment_Count
             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON

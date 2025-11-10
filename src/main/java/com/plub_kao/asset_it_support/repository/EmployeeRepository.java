@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+    boolean existsByEmail(String email);
 
-    //ดึงข้อมูลรายชื่อ employee ออกมาทั้งหมด
     @Query(value = """
                SELECT
                    e.id AS employee_id,
