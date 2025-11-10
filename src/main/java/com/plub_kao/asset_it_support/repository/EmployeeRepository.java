@@ -96,6 +96,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
                         e.description,
                         e.department_id,
                         d.department_name,
+                        rm.room_name,
                         e.role_id,
                         r.role_name,
                         b.building_name,
