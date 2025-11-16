@@ -97,6 +97,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                	lot l ON l.id = e.lot_id
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
+                               ORDER BY
+                                l.purchase_date DESC, l.id;
             
             """, nativeQuery = true)
     List<EquipmentView> findAllEquipment();
@@ -225,8 +227,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                	lot l ON l.id = e.lot_id
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
-            WHERE
-               es.id = :equipmentStatusId
+                               WHERE
+                                es.id = :equipmentStatusId
+                               ORDER BY
+                                l.purchase_date DESC, l.id;
             """, nativeQuery = true)
     List<EquipmentView> FilterEquipmentStatus(@Param("equipmentStatusId") int Id);
 
@@ -267,8 +271,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                	lot l ON l.id = e.lot_id
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
-            WHERE
-               et.id = :equipmentTypeId
+                               WHERE
+                                et.id = :equipmentTypeId
+                               ORDER BY
+                                l.purchase_date DESC, l.id;
             """, nativeQuery = true)
     List<EquipmentView> FilterEquipmentType(@Param("equipmentTypeId") int id);
 
@@ -309,9 +315,11 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
                                	lot l ON l.id = e.lot_id
                                LEFT JOIN
                                	lot_type lt ON lt.id = l.lot_type_id
-            WHERE
-               (:equipmentStatusId IS NULL OR e.equipment_status_id = :equipmentStatusId)
-                     AND (:equipmentTypeId IS NULL OR e.equipment_type_id = :equipmentTypeId)
+                               WHERE
+                               (:equipmentStatusId IS NULL OR e.equipment_status_id = :equipmentStatusId)
+                               AND (:equipmentTypeId IS NULL OR e.equipment_type_id = :equipmentTypeId)
+                               ORDER BY
+                                l.purchase_date DESC, l.id;
             """, nativeQuery = true)
     List<EquipmentView> findByDynamicFilter(@Param("equipmentStatusId") int equipmentStatusId,
                                             @Param("equipmentTypeId") int equipmentTypeId);

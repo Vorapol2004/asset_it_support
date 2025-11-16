@@ -1,15 +1,14 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
 
+import com.plub_kao.asset_it_support.entity.building.BuildingDto;
 import com.plub_kao.asset_it_support.entity.building.BuildingView;
+import com.plub_kao.asset_it_support.entity.floor.FloorDto;
 import com.plub_kao.asset_it_support.entity.floor.FloorView;
 import com.plub_kao.asset_it_support.service.FloorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +25,25 @@ public class FloorController {
     public ResponseEntity<List<FloorView>> filterFloor(@RequestParam Integer buildingId) {
         List<FloorView> FloorView = floorService.filterFloor(buildingId);
         return ResponseEntity.ok(FloorView);
+    }
+
+    @PostMapping("/create")
+    public FloorDto create(@RequestBody FloorDto dto) {
+        return floorService.create(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FloorDto> updateFloor(
+            @PathVariable Integer id,
+            @RequestBody FloorDto request
+    ) {
+        FloorDto updated = floorService.update(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        floorService.deleteFloor(id);
     }
 }

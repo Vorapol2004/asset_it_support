@@ -1,11 +1,12 @@
 package com.plub_kao.asset_it_support.entity.department;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.plub_kao.asset_it_support.entity.building.Building;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,10 +14,14 @@ import lombok.Setter;
 @Table(name = "department")
 public class Department {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "department_name", nullable = false, length = 100)
     private String departmentName;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Building> buildings = new ArrayList<>();
 
 }

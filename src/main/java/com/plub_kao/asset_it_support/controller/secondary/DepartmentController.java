@@ -1,13 +1,12 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
-import com.plub_kao.asset_it_support.entity.department.Department;
-import com.plub_kao.asset_it_support.entity.department.DepartmentLocationRequest;
+
+import com.plub_kao.asset_it_support.entity.department.DepartmentDto;
 import com.plub_kao.asset_it_support.entity.department.DepartmentView;
-import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatusView;
-import com.plub_kao.asset_it_support.repository.DepartmentRepository;
+
 import com.plub_kao.asset_it_support.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +28,19 @@ public class DepartmentController {
 
     }
 
+    @PostMapping("/create")
+    public DepartmentDto create(@RequestBody DepartmentDto dto) {
+        return departmentService.create(dto);
+    }
 
+    @PutMapping("/{id}")
+    public DepartmentDto update(@PathVariable Integer id, @RequestBody DepartmentDto dto) {
+        dto.setId(id);
+        return departmentService.update(dto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        departmentService.delete(id);
+    }
 }

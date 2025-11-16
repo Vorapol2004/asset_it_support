@@ -1,6 +1,7 @@
 package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.entity.department.Department;
+import com.plub_kao.asset_it_support.entity.department.DepartmentDto;
 import com.plub_kao.asset_it_support.entity.department.DepartmentView;
 import com.plub_kao.asset_it_support.entity.equipmentStatus.EquipmentStatusView;
 import com.plub_kao.asset_it_support.repository.*;
@@ -24,6 +25,28 @@ public class DepartmentService {
         } catch (RuntimeException e) {
             throw new RuntimeException("พัง", e);
         }
+    }
+
+    public DepartmentDto create(DepartmentDto departmentDto) {
+        Department department = new Department();
+        department.setDepartmentName(departmentDto.getDepartmentName());
+        departmentRepository.save(department);
+
+        departmentDto.setId(department.getId());
+        return departmentDto;
+    }
+
+    public DepartmentDto update(DepartmentDto departmentDto) {
+        Department department = departmentRepository.findById(departmentDto.getId())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        department.setDepartmentName(departmentDto.getDepartmentName());
+        departmentRepository.save(department);
+        return departmentDto;
+    }
+
+    public void delete(Integer id) {
+        departmentRepository.deleteById(id);
     }
 
 

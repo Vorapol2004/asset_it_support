@@ -1,9 +1,13 @@
 package com.plub_kao.asset_it_support.entity.building;
 
 import com.plub_kao.asset_it_support.entity.department.Department;
+import com.plub_kao.asset_it_support.entity.floor.Floor;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,5 +25,8 @@ public class Building {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Floor> floors = new ArrayList<>();
 
 }

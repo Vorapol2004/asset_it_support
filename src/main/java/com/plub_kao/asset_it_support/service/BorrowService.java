@@ -49,9 +49,12 @@ public class BorrowService {
 
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *") // รันทุกวันตอนเที่ยงคืน
+    @Scheduled(cron = "/10 0 0 * * *") // รันทุกวันตอนเที่ยงคืน
     public void updateOverdueBorrowStatus() {
+
+        System.out.println(">>> Running scheduled updateOverdueBorrowStatus()");
         borrowRepository.updateOverdueStatus();
+        System.out.println(">>> Finished scheduled update");
     }
 
 
@@ -80,7 +83,6 @@ public class BorrowService {
         }
 
     }
-
 
     public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
                                                 @RequestParam Integer roleId) {
@@ -129,10 +131,8 @@ public class BorrowService {
         List<BorrowEquipment> borrowEquipmentList = new ArrayList<>();
         for (Integer equipmentId : request.getEquipmentIds()) {
 
-
             Equipment equipment = equipmentRepository.findById(equipmentId)
                     .orElseThrow(() -> new IllegalArgumentException(" equipment " + equipmentId));
-
 
             boolean isBorrowingNow = borrowEquipmentRepository.existsByEquipmentIdAndReturnDateIsNull(equipmentId);
 
