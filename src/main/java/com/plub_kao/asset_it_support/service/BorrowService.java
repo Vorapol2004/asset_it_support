@@ -2,6 +2,7 @@ package com.plub_kao.asset_it_support.service;
 
 import com.plub_kao.asset_it_support.controller.main.ReturnRequest;
 import com.plub_kao.asset_it_support.entity.BorrowEquipment;
+import com.plub_kao.asset_it_support.entity.borrow.BorrowResponseTest;
 import com.plub_kao.asset_it_support.entity.borrowStatus.BorrowStatus;
 import com.plub_kao.asset_it_support.entity.borrow.Borrow;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
@@ -100,7 +101,7 @@ public class BorrowService {
 
 
     @Transactional
-    public BorrowResponse createBorrow(BorrowRequest request) {
+    public BorrowResponseTest createBorrow(BorrowRequest request) {
 
         Set<Integer> unique = new HashSet<>(request.getEquipmentIds());
         if (unique.size() != request.getEquipmentIds().size()) {
@@ -154,7 +155,7 @@ public class BorrowService {
 
         borrow.setBorrowEquipments(borrowEquipmentList);
 
-        return createBorrowResponse(borrowRepository.save(borrow));
+        return createBorrowResponseTest(borrowRepository.save(borrow));
     }
 
     private BorrowResponse createBorrowResponse(Borrow savedBorrow) {
@@ -175,6 +176,41 @@ public class BorrowService {
             response.addEquipmentInfo(borrowEquipment.getEquipment());
         }
 
+        return response;
+    }
+
+    private BorrowResponseTest createBorrowResponseTest(Borrow savedBorrow) {
+
+        BorrowResponseTest response = new BorrowResponseTest();
+        response.setId(savedBorrow.getId());
+        response.setBorrowDate(savedBorrow.getBorrowDate());
+        response.setReferenceDoc(savedBorrow.getReferenceDoc());
+
+        BorrowResponseTest.PersonInfo emp = new BorrowResponseTest.PersonInfo();
+        emp.setId(savedBorrow.getEmployee().getId());
+        emp.setName(savedBorrow.getEmployee().getFirstName() + " " + savedBorrow.getEmployee().getLastName());
+        response.setEmployee(emp);
+
+        BorrowResponseTest.PersonInfo approver = new BorrowResponseTest.PersonInfo();
+        approver.setName(savedBorrow.getApproverName());
+        response.setApprover(approver);
+
+        List<BorrowResponseTest.BorrowEquipment> eqList = new ArrayList<>();
+
+        for (BorrowEquipment be : savedBorrow.getBorrowEquipments()) {
+
+            Equipment eq = be.getEquipment();
+
+            BorrowResponseTest.BorrowEquipment eqInfo = new BorrowResponseTest.BorrowEquipment();
+            eqInfo.setId(eq.getId());
+            eqInfo.setEquipmentName(eq.getEquipmentName());
+            eqInfo.setSerialNumber(eq.getSerialNumber());
+            eqInfo.setLicenseKey(eq.getLicenseKey());
+
+            eqList.add(eqInfo);
+        }
+
+        response.setEquipments(eqList);
         return response;
     }
 

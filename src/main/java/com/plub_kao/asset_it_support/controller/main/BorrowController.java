@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.controller.main;
 
+import com.plub_kao.asset_it_support.entity.borrow.BorrowResponseTest;
 import com.plub_kao.asset_it_support.entity.equipment.view.EquipmentView;
 import com.plub_kao.asset_it_support.entity.role.Role;
 import com.plub_kao.asset_it_support.entity.borrow.BorrowResponse;
@@ -73,7 +74,7 @@ public class BorrowController {
     @PostMapping("/create")
     public ResponseEntity<?> createBorrow(@RequestBody BorrowRequest request) {
         try {
-            BorrowResponse response = borrowService.createBorrow(request);
+            BorrowResponseTest response = borrowService.createBorrow(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             // ถ้ามี error เช่น อุปกรณ์ไม่พร้อม หรือไม่พบผู้ยืม

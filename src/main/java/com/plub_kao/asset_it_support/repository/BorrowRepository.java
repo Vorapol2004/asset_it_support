@@ -252,6 +252,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 OR eq.serial_number LIKE CONCAT('%',:keyword, '%')
                 OR e.first_name LIKE CONCAT('%',:keyword, '%')
                 OR e.last_name LIKE CONCAT('%',:keyword, '%')
+                OR l.lot_name LIKE CONCAT('%',:keyword,'%')
                 OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
             
             GROUP BY
