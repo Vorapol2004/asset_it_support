@@ -15,8 +15,8 @@ public class BorrowResponseTest {
     private Integer borrowStatusId;
     private String referenceDoc;
     private EmployeeInfo employee;
-    private String approver;
-
+    private String approverName;
+    private Integer borrowEquipmentCount;
     private List<BorrowEquipment> equipments;
 
     @Getter

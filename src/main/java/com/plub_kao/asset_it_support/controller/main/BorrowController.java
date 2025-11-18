@@ -41,8 +41,8 @@ public class BorrowController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<BorrowView>> getAllBorrowed() {
-        List<BorrowView> borrowViews = borrowService.findAllBorrowed();
+    public ResponseEntity<List<BorrowResponseTest>> getAllBorrowed() {
+        List<BorrowResponseTest> borrowViews = borrowService.findAllBorrowedTest();
         return new ResponseEntity<>(borrowViews, HttpStatus.OK);
     }
 

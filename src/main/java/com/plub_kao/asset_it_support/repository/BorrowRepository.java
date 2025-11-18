@@ -19,15 +19,30 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Query(value = """
             SELECT
                 b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
                 e.first_name,
                 e.last_name,
                 e.email,
                 e.phone,
                 r.role_name,
-                b.borrow_date,
+                d.department_name,
+            
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
                 be.due_date,
-                bs.borrow_status_name,
-                COUNT(be.id) AS borrow_equipment_Count
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
             
             FROM
                 `borrow` b
@@ -48,14 +63,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             LEFT JOIN role r ON
                 r.id = e.role_id
             
-            GROUP BY
-            	b.id,
-                e.first_name,
-                e.last_name,
-                r.role_name,
-                b.borrow_date,
-                e.email,
-                bs.borrow_status_name
             ORDER BY
                 b.borrow_date DESC;
             

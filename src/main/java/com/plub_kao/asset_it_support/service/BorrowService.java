@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -68,6 +65,63 @@ public class BorrowService {
         }
     }
 
+    public List<BorrowResponseTest> findAllBorrowedTest() {
+
+        List<BorrowView> rows = borrowRepository.findAllBorrow();
+
+        // ใช้ BorrowResponseTest แทน BorrowResponse
+        Map<Integer, BorrowResponseTest> map = new LinkedHashMap<>();
+
+        for (BorrowView row : rows) {
+
+            // หา borrow id เดิม หรือสร้างใหม่
+            BorrowResponseTest br = map.get(row.getId());
+            if (br == null) {
+                br = new BorrowResponseTest();
+                br.setId(row.getId());
+                br.setBorrowDate(row.getBorrowDate());
+                br.setBorrowStatusId(row.getBorrowStatusId());
+                br.setReferenceDoc(row.getReferenceDoc());
+                br.setApproverName(row.getApproverName());
+                br.setBorrowEquipmentCount(row.getBorrowEquipmentCount());
+                // set employee
+                BorrowResponseTest.EmployeeInfo emp = new BorrowResponseTest.EmployeeInfo();
+                emp.setId(row.getEmployeeId());
+                emp.setFirstName(row.getFirstName());
+                emp.setLastName(row.getLastName());
+                emp.setEmail(row.getEmail());
+                emp.setPhone(row.getPhone());
+                emp.setRoleName(row.getRoleName());
+                emp.setDepartmentName(row.getDepartmentName());
+                br.setEmployee(emp);
+
+                // เตรียม list ของ BorrowEquipment
+                br.setEquipments(new ArrayList<>());
+
+                map.put(row.getId(), br);
+            }
+
+            // ถ้ามีอุปกรณ์ → เพิ่มลง list
+            if (row.getEquipmentId() != null) {
+
+                BorrowResponseTest.BorrowEquipment eq = new BorrowResponseTest.BorrowEquipment();
+                eq.setId(row.getEquipmentId());
+                eq.setBorrowEquipmentId(row.getBorrowEquipmentId());
+                eq.setEquipmentName(row.getEquipmentName());
+                eq.setSerialNumber(row.getSerialNumber());
+                eq.setLicenseKey(row.getLicenseKey());
+                eq.setBrand(row.getBrand());
+                eq.setModel(row.getModel());
+                eq.setEquipmentTypeName(row.getEquipmentTypeName());
+                eq.setDueDate(row.getDueDate());
+                eq.setReturnDate(row.getReturnDate());
+
+                br.getEquipments().add(eq);
+            }
+        }
+
+        return new ArrayList<>(map.values());
+    }
 
     public List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword) {
         List<BorrowView> borrowViews = borrowRepository.searchBorrowEquipment(keyword);
@@ -185,8 +239,9 @@ public class BorrowService {
         response.setId(savedBorrow.getId());
         response.setBorrowDate(savedBorrow.getBorrowDate());
         response.setReferenceDoc(savedBorrow.getReferenceDoc());
-        response.setApprover(savedBorrow.getApproverName());
+        response.setApproverName(savedBorrow.getApproverName());
         response.setBorrowStatusId(savedBorrow.getBorrowStatus().getId());
+
 
         BorrowResponseTest.EmployeeInfo emp = new BorrowResponseTest.EmployeeInfo();
         emp.setId(savedBorrow.getEmployee().getId());
@@ -208,21 +263,21 @@ public class BorrowService {
 
             BorrowResponseTest.BorrowEquipment eqInfo = new BorrowResponseTest.BorrowEquipment();
             eqInfo.setId(eq.getId());
-            eqInfo.setBorrowEquipmentId(be.getId());   // 👈 เพิ่ม ID ของ BorrowEquipment
+            eqInfo.setBorrowEquipmentId(be.getId());
             eqInfo.setEquipmentName(eq.getEquipmentName());
             eqInfo.setSerialNumber(eq.getSerialNumber());
             eqInfo.setLicenseKey(eq.getLicenseKey());
 
-            // 👇 เพิ่ม field ใหม่ทั้งหมด
+
             eqInfo.setBrand(eq.getBrand());
             eqInfo.setModel(eq.getModel());
             eqInfo.setEquipmentTypeName(eq.getEquipmentType().getEquipmentTypeName());
 
-            eqInfo.setDueDate(be.getDueDate());       // วันที่กำหนดคืน (จาก BorrowEquipment)
-            eqInfo.setReturnDate(be.getReturnDate()); // วันที่คืนจริง (จาก BorrowEquipment)
-
+            eqInfo.setDueDate(be.getDueDate());
+            eqInfo.setReturnDate(be.getReturnDate());
             eqList.add(eqInfo);
         }
+        response.setBorrowEquipmentCount(eqList.size());
 
         response.setEquipments(eqList);
         return response;

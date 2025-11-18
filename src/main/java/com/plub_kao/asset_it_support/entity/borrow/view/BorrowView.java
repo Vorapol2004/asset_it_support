@@ -16,6 +16,10 @@ public interface BorrowView {
 
     String getPhone();
 
+    Integer getBorrowStatusId();
+
+    Integer getEmployeeId();
+
     String getRoleName();
 
     String getReferenceDoc();
@@ -41,6 +45,8 @@ public interface BorrowView {
     String getLicenseKey();
 
     String getSerialNumber();
+
+    String getModel();
 
     String getBorrowStatusName();
 
