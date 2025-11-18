@@ -42,11 +42,18 @@ public class EquipmentService {
     }
 
     public List<EquipmentView> equipmentIdentifier(@RequestParam String keyword) {
-        try {
-            return equipmentRepository.equipmentIdentifier(keyword);
-        } catch (Exception e) {
-            throw new RuntimeException("ไม่เจอ", e);
+//        try {
+//            return equipmentRepository.equipmentIdentifier(keyword);
+//        } catch (Exception e) {
+//            throw new RuntimeException("ไม่เจอ", e);
+//        }
+        List<EquipmentView> result = equipmentRepository.equipmentIdentifier(keyword);
+
+        if (!result.isEmpty()) {
+            throw new IllegalArgumentException("หมายเลขนี้ถูกใช้ไปแล้ว");
         }
+
+        return result;
 
     }
 

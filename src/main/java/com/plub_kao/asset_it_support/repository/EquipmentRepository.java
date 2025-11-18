@@ -16,6 +16,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
 
     Optional<Equipment> findByLicenseKey(String licenseKey);
 
+    boolean existsBySerialNumber(String serialNumber);
+
+    boolean existsByLicenseKey(String licenseKey);
+
     //ดึงรายชื่อของ equipment ที่มีอยู่ในระบบออกมาแสดงทั้งหมด
     @Query(value = """
                 SELECT
