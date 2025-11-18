@@ -1,7 +1,5 @@
 package com.plub_kao.asset_it_support.entity.borrow;
 
-import com.plub_kao.asset_it_support.entity.BorrowEquipment;
-import com.plub_kao.asset_it_support.entity.equipment.Equipment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,17 +12,23 @@ public class BorrowResponseTest {
 
     private Integer id;
     private LocalDate borrowDate;
+    private Integer borrowStatusId;
     private String referenceDoc;
-    private PersonInfo employee;
-    private PersonInfo approver;
+    private EmployeeInfo employee;
+    private String approver;
 
     private List<BorrowEquipment> equipments;
 
     @Getter
     @Setter
-    public static class PersonInfo {
+    public static class EmployeeInfo {
         private Integer id;
-        private String name;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private String phone;
+        private String roleName;
+        private String departmentName;
     }
 
     @Getter
@@ -32,9 +36,16 @@ public class BorrowResponseTest {
     public static class BorrowEquipment {
 
         private Integer id;
+        private Integer borrowEquipmentId;
         private String equipmentName;
         private String serialNumber;
         private String licenseKey;
+        private String brand;
+        private String model;
+        private String equipmentTypeName;
+        private LocalDate dueDate;
+        private LocalDate returnDate;
+
 
     }
 
@@ -44,6 +55,5 @@ public class BorrowResponseTest {
         private Integer id;
         private String name;
     }
-
 
 }

@@ -185,15 +185,20 @@ public class BorrowService {
         response.setId(savedBorrow.getId());
         response.setBorrowDate(savedBorrow.getBorrowDate());
         response.setReferenceDoc(savedBorrow.getReferenceDoc());
+        response.setApprover(savedBorrow.getApproverName());
+        response.setBorrowStatusId(savedBorrow.getBorrowStatus().getId());
 
-        BorrowResponseTest.PersonInfo emp = new BorrowResponseTest.PersonInfo();
+        BorrowResponseTest.EmployeeInfo emp = new BorrowResponseTest.EmployeeInfo();
         emp.setId(savedBorrow.getEmployee().getId());
-        emp.setName(savedBorrow.getEmployee().getFirstName() + " " + savedBorrow.getEmployee().getLastName());
+        emp.setFirstName(savedBorrow.getEmployee().getFirstName());
+        emp.setLastName(savedBorrow.getEmployee().getLastName());
+        emp.setPhone(savedBorrow.getEmployee().getPhone());
+        emp.setEmail(savedBorrow.getEmployee().getEmail());
+        emp.setRoleName(savedBorrow.getEmployee().getRole().getRoleName());
+        emp.setDepartmentName(savedBorrow.getEmployee().getDepartment().getDepartmentName());
+
         response.setEmployee(emp);
 
-        BorrowResponseTest.PersonInfo approver = new BorrowResponseTest.PersonInfo();
-        approver.setName(savedBorrow.getApproverName());
-        response.setApprover(approver);
 
         List<BorrowResponseTest.BorrowEquipment> eqList = new ArrayList<>();
 
@@ -203,9 +208,18 @@ public class BorrowService {
 
             BorrowResponseTest.BorrowEquipment eqInfo = new BorrowResponseTest.BorrowEquipment();
             eqInfo.setId(eq.getId());
+            eqInfo.setBorrowEquipmentId(be.getId());   // 👈 เพิ่ม ID ของ BorrowEquipment
             eqInfo.setEquipmentName(eq.getEquipmentName());
             eqInfo.setSerialNumber(eq.getSerialNumber());
             eqInfo.setLicenseKey(eq.getLicenseKey());
+
+            // 👇 เพิ่ม field ใหม่ทั้งหมด
+            eqInfo.setBrand(eq.getBrand());
+            eqInfo.setModel(eq.getModel());
+            eqInfo.setEquipmentTypeName(eq.getEquipmentType().getEquipmentTypeName());
+
+            eqInfo.setDueDate(be.getDueDate());       // วันที่กำหนดคืน (จาก BorrowEquipment)
+            eqInfo.setReturnDate(be.getReturnDate()); // วันที่คืนจริง (จาก BorrowEquipment)
 
             eqList.add(eqInfo);
         }
