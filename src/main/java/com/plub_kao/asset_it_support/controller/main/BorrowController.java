@@ -46,19 +46,28 @@ public class BorrowController {
         return new ResponseEntity<>(borrowViews, HttpStatus.OK);
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<BorrowResponseTest>> filter(
-            @RequestParam(required = false) Integer borrowStatusId,
-            @RequestParam(required = false) Integer roleId
-    ) {
-        List<BorrowResponseTest> BorrowView = borrowService.filterStatusAndRole(borrowStatusId, roleId);
-        return ResponseEntity.ok(BorrowView);
-    }
 
     @GetMapping("/select")
     public ResponseEntity<List<BorrowResponseTest>> selectBorrow(@RequestParam Integer borrowId) {
         List<BorrowResponseTest> borrow = borrowService.selectBorrowId(borrowId);
         return ResponseEntity.ok(borrow);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<BorrowResponseTest>> filter(
+            @RequestParam(required = false) Integer borrowStatusId,
+            @RequestParam(required = false) Integer roleId,
+            @RequestParam(required = false) Integer departmentId,
+            @RequestParam(required = false) String keyword
+    ) {
+        List<BorrowResponseTest> result = borrowService.filterStatusRoleDeptKeyword(
+                borrowStatusId,
+                roleId,
+                departmentId,
+                keyword
+        );
+
+        return ResponseEntity.ok(result);
     }
 
 

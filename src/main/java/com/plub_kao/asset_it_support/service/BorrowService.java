@@ -130,8 +130,25 @@ public class BorrowService {
         return convertToBorrowResponseTest(rows);
     }
 
+    public List<BorrowResponseTest> filterStatusRoleDeptKeyword(
+            Integer borrowStatusId,
+            Integer roleId,
+            Integer departmentId,
+            String keyword
+    ) {
+        List<BorrowView> rows = borrowRepository.dynamicFilter(
+                borrowStatusId,
+                roleId,
+                departmentId,
+                keyword
+        );
+
+        return convertToBorrowResponseTest(rows);
+    }
+
     public List<BorrowResponseTest> filterStatusAndRole(Integer borrowStatusId,
-                                                        Integer roleId) {
+                                                        Integer roleId,
+                                                        Integer departmentId) {
 
         List<BorrowView> rows;
 

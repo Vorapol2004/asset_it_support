@@ -189,6 +189,67 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             """, nativeQuery = true)
     List<BorrowView> FilterBorrowStatus(@Param("borrowStatusId") int id);
 
+    @Query(value = """
+            SELECT
+                b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
+                e.first_name,
+                e.last_name,
+                e.email,
+                e.phone,
+                r.role_name,
+                d.department_name,
+            
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
+                be.due_date,
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+            
+            FROM borrow b
+            LEFT JOIN borrow_equipment be ON be.borrow_id = b.id
+            LEFT JOIN borrow_status bs ON bs.id = b.borrow_status_id
+            LEFT JOIN equipment eq ON eq.id = be.equipment_id
+            LEFT JOIN equipment_type eqt ON eqt.id = eq.equipment_type_id
+            LEFT JOIN equipment_status eqs ON eqs.id = eq.equipment_status_id
+            LEFT JOIN employee e ON e.id = b.employee_id
+            LEFT JOIN department d ON d.id = e.department_id
+            LEFT JOIN role r ON r.id = e.role_id
+            
+            WHERE 1 = 1
+                AND (:statusId IS NULL OR b.borrow_status_id = :statusId)
+                AND (:roleId IS NULL OR r.id = :roleId)
+                AND (:departmentId IS NULL OR d.id = :departmentId)
+                AND (
+                        :keyword IS NULL
+                        OR eq.license_key LIKE CONCAT('%', :keyword, '%')
+                        OR eq.serial_number LIKE CONCAT('%', :keyword, '%')
+                        OR e.first_name LIKE CONCAT('%', :keyword, '%')
+                        OR e.last_name LIKE CONCAT('%', :keyword, '%')
+                        OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
+                    )
+            
+            ORDER BY b.borrow_date DESC
+            """, nativeQuery = true)
+    List<BorrowView> dynamicFilter(
+            @Param("statusId") Integer statusId,
+            @Param("roleId") Integer roleId,
+            @Param("departmentId") Integer departmentId,
+            @Param("keyword") String keyword
+    );
+
 
     @Query(value = """
              SELECT

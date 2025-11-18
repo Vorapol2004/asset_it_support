@@ -1,10 +1,12 @@
 package com.plub_kao.asset_it_support.controller.secondary;
 
 
+import com.plub_kao.asset_it_support.entity.borrow.BorrowResponseTest;
 import com.plub_kao.asset_it_support.entity.department.DepartmentDto;
 import com.plub_kao.asset_it_support.entity.department.DepartmentView;
 
 import com.plub_kao.asset_it_support.service.DepartmentService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,7 @@ public class DepartmentController {
         dto.setId(id);
         return departmentService.update(dto);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {

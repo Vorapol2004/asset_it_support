@@ -1,5 +1,6 @@
 package com.plub_kao.asset_it_support.service;
 
+import com.plub_kao.asset_it_support.entity.borrow.view.BorrowView;
 import com.plub_kao.asset_it_support.entity.department.Department;
 import com.plub_kao.asset_it_support.entity.department.DepartmentDto;
 import com.plub_kao.asset_it_support.entity.department.DepartmentView;
@@ -17,6 +18,7 @@ public class DepartmentService {
 
 
     private final DepartmentRepository departmentRepository;
+    private final BorrowRepository borrowRepository;
 
 
     public List<DepartmentView> findAll() {
@@ -44,6 +46,7 @@ public class DepartmentService {
         departmentRepository.save(department);
         return departmentDto;
     }
+
 
     public void delete(Integer id) {
         departmentRepository.deleteById(id);
