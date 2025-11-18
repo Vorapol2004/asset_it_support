@@ -56,13 +56,9 @@ public class BorrowService {
     }
 
 
-    public List<BorrowView> findAllBorrowed() {
-        try {
-            List<BorrowView> borrowViews = borrowRepository.findAllBorrow();
-            return borrowViews;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public List<BorrowResponseTest> findAllBorrowed() {
+        List<BorrowView> rows = borrowRepository.findAllBorrow();
+        return convertToBorrowResponseTest(rows);
     }
 
     public List<BorrowResponseTest> findAllBorrowedTest() {
@@ -81,6 +77,7 @@ public class BorrowService {
                 br.setId(row.getId());
                 br.setBorrowDate(row.getBorrowDate());
                 br.setBorrowStatusId(row.getBorrowStatusId());
+                br.setBorrowStatusName(row.getBorrowStatusName());
                 br.setReferenceDoc(row.getReferenceDoc());
                 br.setApproverName(row.getApproverName());
                 br.setBorrowEquipmentCount(row.getBorrowEquipmentCount());
@@ -123,34 +120,35 @@ public class BorrowService {
         return new ArrayList<>(map.values());
     }
 
-    public List<BorrowView> searchBorrowEquipment(@Param("keyword") String keyword) {
-        List<BorrowView> borrowViews = borrowRepository.searchBorrowEquipment(keyword);
-        return borrowViews;
+    public List<BorrowResponseTest> searchBorrowEquipment(String keyword) {
+        List<BorrowView> rows = borrowRepository.searchBorrowEquipment(keyword);
+        return convertToBorrowResponseTest(rows);
     }
 
-
-    public List<BorrowView> selectBorrowId(@RequestParam Integer borrowId) {
-        try {
-            List<BorrowView> borrowViews = borrowRepository.selectBorrow(borrowId);
-            return borrowViews;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+    public List<BorrowResponseTest> selectBorrowId(Integer borrowId) {
+        List<BorrowView> rows = borrowRepository.selectBorrow(borrowId);
+        return convertToBorrowResponseTest(rows);
     }
 
-    public List<BorrowView> filterStatusAndRole(@RequestParam Integer borrowStatusId,
-                                                @RequestParam Integer roleId) {
+    public List<BorrowResponseTest> filterStatusAndRole(Integer borrowStatusId,
+                                                        Integer roleId) {
+
+        List<BorrowView> rows;
+
         if (borrowStatusId != null && roleId == null) {
-            return borrowStatusService.FilterBorrowStatus(borrowStatusId);
+            rows = borrowStatusService.FilterBorrowStatus(borrowStatusId);
+
+        } else if (borrowStatusId == null && roleId != null) {
+            rows = roleService.FilterBorrowStatus(roleId);
+
+        } else if (borrowStatusId != null && roleId != null) {
+            rows = borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
+
+        } else {
+            rows = borrowRepository.findAllBorrow();
         }
-        if (borrowStatusId == null && roleId != null) {
-            return roleService.FilterBorrowStatus(roleId);
-        }
-        if (borrowStatusId != null && roleId != null) {
-            return borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
-        }
-        return borrowRepository.findAllBorrow();
+
+        return convertToBorrowResponseTest(rows);
     }
 
 
@@ -309,5 +307,60 @@ public class BorrowService {
         borrowRepository.save(borrow);
 
         return "returned successfully";
+    }
+
+    public List<BorrowResponseTest> convertToBorrowResponseTest(List<BorrowView> rows) {
+
+        Map<Integer, BorrowResponseTest> map = new LinkedHashMap<>();
+
+        for (BorrowView row : rows) {
+
+            // หา borrow id เดิม หรือสร้างใหม่
+            BorrowResponseTest br = map.get(row.getId());
+            if (br == null) {
+                br = new BorrowResponseTest();
+                br.setId(row.getId());
+                br.setBorrowDate(row.getBorrowDate());
+                br.setBorrowStatusId(row.getBorrowStatusId());
+                br.setBorrowStatusName(row.getBorrowStatusName());
+                br.setReferenceDoc(row.getReferenceDoc());
+                br.setApproverName(row.getApproverName());
+                br.setBorrowEquipmentCount(row.getBorrowEquipmentCount());
+
+                BorrowResponseTest.EmployeeInfo emp = new BorrowResponseTest.EmployeeInfo();
+                emp.setId(row.getEmployeeId());
+                emp.setFirstName(row.getFirstName());
+                emp.setLastName(row.getLastName());
+                emp.setEmail(row.getEmail());
+                emp.setPhone(row.getPhone());
+                emp.setRoleName(row.getRoleName());
+                emp.setDepartmentName(row.getDepartmentName());
+                br.setEmployee(emp);
+
+                br.setEquipments(new ArrayList<>());
+
+                map.put(row.getId(), br);
+            }
+
+            // อุปกรณ์
+            if (row.getEquipmentId() != null) {
+
+                BorrowResponseTest.BorrowEquipment eq = new BorrowResponseTest.BorrowEquipment();
+                eq.setId(row.getEquipmentId());
+                eq.setBorrowEquipmentId(row.getBorrowEquipmentId());
+                eq.setEquipmentName(row.getEquipmentName());
+                eq.setSerialNumber(row.getSerialNumber());
+                eq.setLicenseKey(row.getLicenseKey());
+                eq.setBrand(row.getBrand());
+                eq.setModel(row.getModel());
+                eq.setEquipmentTypeName(row.getEquipmentTypeName());
+                eq.setDueDate(row.getDueDate());
+                eq.setReturnDate(row.getReturnDate());
+
+                br.getEquipments().add(eq);
+            }
+        }
+
+        return new ArrayList<>(map.values());
     }
 }

@@ -21,6 +21,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 b.id,
                 b.borrow_date,
                 b.borrow_status_id,
+                bs.borrow_status_name,
                 b.reference_doc,
                 b.approver_name,
             
@@ -75,17 +76,33 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Query(value = """
             SELECT
                 b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
                 e.first_name,
                 e.last_name,
                 e.email,
                 e.phone,
                 r.role_name,
-                b.borrow_date,
-                be.due_date,
-                bs.borrow_status_name,
-                COUNT(be.id) AS borrow_equipment_Count
+                d.department_name,
             
-            FROM
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
+                be.due_date,
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+            
+             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
                 be.borrow_id = b.id
@@ -106,14 +123,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             
             WHERE
                 e.role_id = :roleId
-            GROUP BY
-            	b.id,
-                e.first_name,
-                e.last_name,
-                r.role_name,
-                b.borrow_date,
-                e.email,
-                bs.borrow_status_name
             ORDER BY
                 b.borrow_date DESC;
             
@@ -126,16 +135,33 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Query(value = """
             SELECT
                 b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
                 e.first_name,
                 e.last_name,
                 e.email,
                 e.phone,
                 r.role_name,
-                b.borrow_date,
+                d.department_name,
+            
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
                 be.due_date,
-                bs.borrow_status_name,
-                COUNT(be.id) AS borrow_equipment_Count
-            FROM
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+            
+             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
                 be.borrow_id = b.id
@@ -153,17 +179,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 d.id = e.department_id
             LEFT JOIN role r ON
                 r.id = e.role_id
-            
             WHERE
                  b.borrow_status_id = :borrowStatusId
-            GROUP BY
-            	b.id,
-                e.first_name,
-                e.last_name,
-                r.role_name,
-                b.borrow_date,
-                e.email,
-                bs.borrow_status_name
             ORDER BY
                 b.borrow_date DESC;
             
@@ -176,16 +193,33 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Query(value = """
              SELECT
                 b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
                 e.first_name,
                 e.last_name,
                 e.email,
                 e.phone,
                 r.role_name,
-                b.borrow_date,
+                d.department_name,
+            
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
                 be.due_date,
-                bs.borrow_status_name,
-                COUNT(be.id) AS borrow_equipment_Count
-            FROM
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+            
+             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
                 be.borrow_id = b.id
@@ -208,14 +242,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                (:borrowStatusId IS NULL OR b.borrow_status_id = :borrowStatusId)
                 AND (:roleId IS NULL OR e.role_id = :roleId)
             
-            GROUP BY
-            	b.id,
-                e.first_name,
-                e.last_name,
-                r.role_name,
-                b.borrow_date,
-                e.email,
-                bs.borrow_status_name
             ORDER BY
                 b.borrow_date DESC;
             
@@ -227,16 +253,33 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Query(value = """
             SELECT
                 b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
+            
+                e.id AS employeeId,
                 e.first_name,
                 e.last_name,
                 e.email,
                 e.phone,
                 r.role_name,
-                b.borrow_date,
+                d.department_name,
+            
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
                 be.due_date,
-                bs.borrow_status_name,
-                COUNT(be.id) AS borrow_equipment_Count
-            FROM
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+            
+             FROM
                 `borrow` b
             LEFT JOIN borrow_equipment be ON
                 be.borrow_id = b.id
@@ -254,6 +297,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 d.id = e.department_id
             LEFT JOIN role r ON
                 r.id = e.role_id
+            LEFT JOIN lot l ON
+            	l.id = eq.lot_id
             WHERE
                 eq.license_key LIKE CONCAT('%', :keyword, '%')
                 OR eq.serial_number LIKE CONCAT('%',:keyword, '%')
@@ -262,14 +307,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
                 OR l.lot_name LIKE CONCAT('%',:keyword,'%')
                 OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
             
-            GROUP BY
-            	b.id,
-                e.first_name,
-                e.last_name,
-                r.role_name,
-                b.borrow_date,
-                e.email,
-                bs.borrow_status_name
             ORDER BY
                 b.borrow_date DESC;
             
@@ -280,49 +317,52 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 
 
     @Query(value = """
-            SELECT
-                 b.id,
-                    d.department_name,
-                    e.first_name,
-                    e.last_name,
-                    e.phone,
-                    e.email,
-                    r.role_name,
-                    b.borrow_date,
-                    b.approver_name,
-                    b.reference_doc,
-                    beq.id AS borrow_equipment_id,
-                    beq.due_date,
-                    beq.return_date,
-                    beq.equipment_id,
-                    eq.id AS equipment_id,
-                    eq.equipment_name,
-                    eq.brand,
-                    eq.model,
-                    eq.license_key,
-                    eq.serial_number,
-                    bs.borrow_status_name,
-                    eqt.equipment_type_name
+             SELECT
+                b.id,
+                b.borrow_date,
+                b.borrow_status_id,
+                bs.borrow_status_name,
+                b.reference_doc,
+                b.approver_name,
             
+                e.id AS employeeId,
+                e.first_name,
+                e.last_name,
+                e.email,
+                e.phone,
+                r.role_name,
+                d.department_name,
             
+                be.id AS borrowEquipmentId,
+                eq.id AS equipmentId,
+                eqt.equipment_type_name,
+                eq.equipment_name,
+                eq.brand,
+                eq.model,
+                eq.serial_number,
+                eq.license_key,
+                be.return_date,
+                be.due_date,
+                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
             
-            FROM
-                borrow b
-            LEFT JOIN
-                employee e ON e.id = b.employee_id
-            LEFT JOIN
-                 role r ON e.role_id = r.id
-            LEFT JOIN
-                borrow_equipment beq ON beq.borrow_id = b.id
-            LEFT JOIN
-                borrow_status bs ON b.borrow_status_id = bs.id
-            LEFT JOIN
-                equipment eq ON beq.equipment_id = eq.id
-            LEFT JOIN
-                equipment_type eqt ON eq.equipment_type_id = eqt.id
-            JOIN
-            	department d ON e.department_id = d.id
-            
+             FROM
+                `borrow` b
+            LEFT JOIN borrow_equipment be ON
+                be.borrow_id = b.id
+            LEFT JOIN borrow_status bs ON
+                bs.id = b.borrow_status_id
+            LEFT JOIN equipment eq ON
+                eq.id = be.equipment_id
+            LEFT JOIN equipment_type eqt ON
+                eqt.id = eq.equipment_type_id
+            LEFT JOIN equipment_status eqs ON
+                eqs.id = eq.equipment_status_id
+            LEFT JOIN employee e ON
+                e.id = b.employee_id
+            LEFT JOIN department d ON
+                d.id = e.department_id
+            LEFT JOIN role r ON
+                r.id = e.role_id
             WHERE
                 b.id = :borrowId;
             

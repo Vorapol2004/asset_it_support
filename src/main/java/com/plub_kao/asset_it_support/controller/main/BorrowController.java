@@ -47,24 +47,24 @@ public class BorrowController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<BorrowView>> filter(
+    public ResponseEntity<List<BorrowResponseTest>> filter(
             @RequestParam(required = false) Integer borrowStatusId,
             @RequestParam(required = false) Integer roleId
     ) {
-        List<BorrowView> BorrowView = borrowService.filterStatusAndRole(borrowStatusId, roleId);
+        List<BorrowResponseTest> BorrowView = borrowService.filterStatusAndRole(borrowStatusId, roleId);
         return ResponseEntity.ok(BorrowView);
     }
 
     @GetMapping("/select")
-    public ResponseEntity<List<BorrowView>> selectBorrow(@RequestParam Integer borrowId) {
-        List<BorrowView> borrow = borrowService.selectBorrowId(borrowId);
+    public ResponseEntity<List<BorrowResponseTest>> selectBorrow(@RequestParam Integer borrowId) {
+        List<BorrowResponseTest> borrow = borrowService.selectBorrowId(borrowId);
         return ResponseEntity.ok(borrow);
     }
 
 
     @GetMapping("/search")
-    public ResponseEntity<List<BorrowView>> searchBorrowEquipment(@RequestParam String keyword) {
-        List<BorrowView> borrowALll = borrowService.searchBorrowEquipment(keyword);
+    public ResponseEntity<List<BorrowResponseTest>> searchBorrowEquipment(@RequestParam String keyword) {
+        List<BorrowResponseTest> borrowALll = borrowService.searchBorrowEquipment(keyword);
         if (borrowALll.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

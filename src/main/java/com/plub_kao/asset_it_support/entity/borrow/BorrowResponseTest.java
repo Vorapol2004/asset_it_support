@@ -13,6 +13,7 @@ public class BorrowResponseTest {
     private Integer id;
     private LocalDate borrowDate;
     private Integer borrowStatusId;
+    private String borrowStatusName;
     private String referenceDoc;
     private EmployeeInfo employee;
     private String approverName;
@@ -55,5 +56,6 @@ public class BorrowResponseTest {
         private Integer id;
         private String name;
     }
+
 
 }
