@@ -1,5 +1,4 @@
-package com.plub_kao.asset_it_support.login.dto;
-
+package com.plub_kao.asset_it_support.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRequest {
-    private String username;
+
+    private String email;
     private String password;
 }

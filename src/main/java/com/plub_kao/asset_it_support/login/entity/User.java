@@ -3,6 +3,10 @@ package com.plub_kao.asset_it_support.login.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,14 +18,14 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 45)
-    private String username;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    @Column(name = "password", nullable = false, length = 64)
-    private String password; // จะเก็บ hashed
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "user_role", nullable = false)
-    private String userRole; // "ADMIN" or "STAFF"
+    @Column(name = "role", nullable = false, length = 50)
+    private String role;
 
 
 }
