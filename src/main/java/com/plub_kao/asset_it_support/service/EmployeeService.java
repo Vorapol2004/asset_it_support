@@ -117,4 +117,40 @@ public class EmployeeService {
 
         return response;
     }
+
+    @Transactional
+    public EmployeeResponse editEmployee(EmployeeRequest request) {
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+        if (request.getFirstName() != null) {
+            employee.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName() != null) {
+            employee.setLastName(request.getLastName());
+        }
+        if (request.getEmail() != null) {
+            employee.setEmail(request.getEmail());
+        }
+        if (request.getPhone() != null) {
+            employee.setPhone(request.getPhone());
+        }
+        if (request.getDescription() != null) {
+            employee.setDescription(request.getDescription());
+        }
+        if (request.getDepartmentId() != null) {
+            Department department = departmentRepository.findById(request.getDepartmentId())
+                    .orElseThrow(() -> new RuntimeException("department not found"));
+            employee.setDepartment(department);
+        }
+        if (request.getRoleId() != null) {
+            Role role = roleRepository.findById(request.getRoleId())
+                    .orElseThrow(() -> new RuntimeException("role not found"));
+            employee.setRole(role);
+
+        }
+
+        employeeRepository.save(employee);
+        return createBorrowResponse(employee);
+    }
 }

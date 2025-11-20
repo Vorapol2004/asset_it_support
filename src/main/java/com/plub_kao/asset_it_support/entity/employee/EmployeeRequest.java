@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class EmployeeRequest {
 
+    private Integer employeeId;
     private String firstName;
     private String lastName;
     private String email;

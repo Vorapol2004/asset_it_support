@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+// ✅ เพิ่ม imports เหล่านี้
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,8 +29,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http.csrf(csrf -> csrf.disable());
+
+        // ✅ เพิ่มบรรทัดนี้
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -33,13 +40,43 @@ public class SecurityConfig {
                 .requestMatchers("/auth/login").permitAll()
                 .requestMatchers("/auth/me").authenticated()
                 .requestMatchers("/auth/logout").authenticated()
-                .requestMatchers("/users/**").hasRole("ADMIN")// user management
+                // ✅ แก้ไข: เปลี่ยนจาก hasRole("ADMIN") เป็น hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/users/**").hasAuthority("ROLE_ADMIN") // user management
                 .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // ✅ เพิ่ม method นี้
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // อนุญาต origin ของ frontend
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+
+        // อนุญาต HTTP methods
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        // อนุญาต headers
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        // อนุญาต credentials (สำคัญสำหรับ JWT)
+        configuration.setAllowCredentials(true);
+
+        // Exposed headers (ให้ frontend อ่านได้)
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+
+        // Cache preflight response (1 hour)
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 
     @Bean
@@ -54,5 +91,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

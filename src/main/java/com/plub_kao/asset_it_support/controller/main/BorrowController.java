@@ -32,11 +32,10 @@ public class BorrowController {
     private final BorrowRepository borrowRepository;
 
 
-    @GetMapping("/update-overdue")
-    public String testOverdueUpdate() {
-        borrowRepository.updateOverdueStatus();
-        return "Updated!";
-
+    @PostMapping("/update-overdue")
+    public ResponseEntity<String> updateOverdue() {
+        borrowService.updateOverdueBorrowStatus();
+        return ResponseEntity.ok("Update overdue status completed.");
     }
 
 

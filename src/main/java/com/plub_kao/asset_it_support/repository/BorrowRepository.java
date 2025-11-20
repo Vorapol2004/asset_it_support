@@ -190,56 +190,62 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     List<BorrowView> FilterBorrowStatus(@Param("borrowStatusId") int id);
 
     @Query(value = """
-            SELECT
-                b.id,
-                b.borrow_date,
-                b.borrow_status_id,
-                bs.borrow_status_name,
-                b.reference_doc,
-                b.approver_name,
+             SELECT
+                            b.id,
+                            b.borrow_date,
+                            b.borrow_status_id,
+                            bs.borrow_status_name,
+                            b.reference_doc,
+                            b.approver_name,
+                            l.lot_name,
             
-                e.id AS employeeId,
-                e.first_name,
-                e.last_name,
-                e.email,
-                e.phone,
-                r.role_name,
-                d.department_name,
+                            e.id AS employeeId,
+                            e.first_name,
+                            e.last_name,
+                            e.email,
+                            e.phone,
+                            r.role_name,
+                            d.department_name,
             
-                be.id AS borrowEquipmentId,
-                eq.id AS equipmentId,
-                eqt.equipment_type_name,
-                eq.equipment_name,
-                eq.brand,
-                eq.model,
-                eq.serial_number,
-                eq.license_key,
-                be.return_date,
-                be.due_date,
-                COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
+                            be.id AS borrowEquipmentId,
+                            eq.id AS equipmentId,
+                            eqt.equipment_type_name,
+                            eq.equipment_name,
+                            eq.brand,
+                            eq.model,
+                            eq.serial_number,
+                            eq.license_key,
+                            be.return_date,
+                            be.due_date,
+                            COUNT(be.id) OVER(PARTITION BY b.id) AS borrow_equipment_count
             
-            FROM borrow b
-            LEFT JOIN borrow_equipment be ON be.borrow_id = b.id
-            LEFT JOIN borrow_status bs ON bs.id = b.borrow_status_id
-            LEFT JOIN equipment eq ON eq.id = be.equipment_id
-            LEFT JOIN equipment_type eqt ON eqt.id = eq.equipment_type_id
-            LEFT JOIN equipment_status eqs ON eqs.id = eq.equipment_status_id
-            LEFT JOIN employee e ON e.id = b.employee_id
-            LEFT JOIN department d ON d.id = e.department_id
-            LEFT JOIN role r ON r.id = e.role_id
+                        FROM borrow b
+                        LEFT JOIN borrow_equipment be ON be.borrow_id = b.id
+                        LEFT JOIN borrow_status bs ON bs.id = b.borrow_status_id
+                        LEFT JOIN equipment eq ON eq.id = be.equipment_id
+                        LEFT JOIN equipment_type eqt ON eqt.id = eq.equipment_type_id
+                        LEFT JOIN equipment_status eqs ON eqs.id = eq.equipment_status_id
+                        LEFT JOIN employee e ON e.id = b.employee_id
+                        LEFT JOIN department d ON d.id = e.department_id
+                        LEFT JOIN role r ON r.id = e.role_id
+                        LEFT JOIN lot l ON l.id = eq.lot_id
             
-            WHERE 1 = 1
-                AND (:statusId IS NULL OR b.borrow_status_id = :statusId)
-                AND (:roleId IS NULL OR r.id = :roleId)
-                AND (:departmentId IS NULL OR d.id = :departmentId)
-                AND (
-                        :keyword IS NULL
-                        OR eq.license_key LIKE CONCAT('%', :keyword, '%')
-                        OR eq.serial_number LIKE CONCAT('%', :keyword, '%')
-                        OR e.first_name LIKE CONCAT('%', :keyword, '%')
-                        OR e.last_name LIKE CONCAT('%', :keyword, '%')
-                        OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
-                    )
+                        WHERE 1 = 1
+                            AND (:statusId IS NULL OR b.borrow_status_id = :statusId)
+                            AND (:roleId IS NULL OR r.id = :roleId)
+                            AND (:departmentId IS NULL OR d.id = :departmentId)
+                            AND (
+                                    :keyword IS NULL
+                                    OR eq.license_key LIKE CONCAT('%', :keyword, '%')
+                                    OR eq.serial_number LIKE CONCAT('%', :keyword, '%')
+                                    OR e.first_name LIKE CONCAT('%', :keyword, '%')
+                                    OR e.last_name LIKE CONCAT('%', :keyword, '%')
+                                	OR e.email LIKE CONCAT('%', :keyword, '%')
+                                	OR d.department_name LIKE CONCAT('%', :keyword, '%')
+                                	OR e.phone LIKE CONCAT('%', :keyword, '%')
+                                	OR l.lot_name LIKE CONCAT('%', :keyword, '%')
+                                    OR CONCAT(e.first_name,' ', e.last_name) LIKE CONCAT('%', :keyword, '%')
+                                )
             
             ORDER BY b.borrow_date DESC
             """, nativeQuery = true)
@@ -427,9 +433,6 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
             WHERE
                 b.id = :borrowId;
             
-            
-            
-            
             """, nativeQuery = true)
     List<BorrowView> selectBorrow(@Param("borrowId") Integer borrowId);
 
@@ -438,16 +441,13 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
     @Modifying
     @Transactional
     @Query(value = """
-             UPDATE
-                borrow_equipment be
-            INNER JOIN borrow_status bs_borrowed ON
-                bs_borrowed.borrow_status_name = 'borrowed'
-            INNER JOIN borrow_status bs_overdue ON
-                bs_overdue.borrow_status_name = 'overdue'
-            SET
-                be.borrow_status_id = bs_overdue.id
-            WHERE
-                be.due_date < CURDATE() AND be.borrow_status_id = bs_borrowed.id
+             UPDATE borrow b
+             INNER JOIN borrow_equipment be ON be.borrow_id = b.id
+             INNER JOIN borrow_status bs_overdue ON bs_overdue.borrow_status_name = 'overdue'
+             INNER JOIN borrow_status bs_borrowed ON bs_borrowed.borrow_status_name = 'borrowed'
+             SET b.borrow_status_id = bs_overdue.id
+             WHERE be.due_date < CURDATE()
+               AND b.borrow_status_id = bs_borrowed.id;
             """, nativeQuery = true)
     void updateOverdueStatus();
 

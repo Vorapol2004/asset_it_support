@@ -46,6 +46,7 @@ public class BorrowResponseTest {
         private String equipmentTypeName;
         private LocalDate dueDate;
         private LocalDate returnDate;
+        private String lotName;
 
 
     }

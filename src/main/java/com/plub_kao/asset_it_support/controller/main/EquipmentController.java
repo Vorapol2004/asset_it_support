@@ -29,20 +29,6 @@ public class EquipmentController {
         return new ResponseEntity<>(equipmentAll, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<EquipmentView>> searchEquipmentKeyword(String keyword) {
-        List<EquipmentView> equipment = equipmentService.searchEquipmentKeyword(keyword);
-        return ResponseEntity.ok(equipment);
-    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<List<EquipmentView>> filter(
-            @RequestParam(required = false) Integer equipmentStatus,
-            @RequestParam(required = false) Integer equipmentType
-    ) {
-        List<EquipmentView> equipment = equipmentService.filterStatusAndType(equipmentStatus, equipmentType);
-        return ResponseEntity.ok(equipment);
-    }
 
     @GetMapping("/identifier")
     public ResponseEntity<List<EquipmentView>> selectEquipmentIdentifier(
@@ -63,6 +49,20 @@ public class EquipmentController {
     public ResponseEntity<List<EquipmentView>> FilterEquipmentSelect(@PathVariable Integer id) {
         List<EquipmentView> equipment = equipmentService.SelectEquipment(id);
         return new ResponseEntity<>(equipment, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<EquipmentView>> filter(
+            @RequestParam(required = false) Integer equipmentStatusId,
+            @RequestParam(required = false) Integer equipmentTypeId,
+            @RequestParam(required = false) String keyword
+    ) {
+        List<EquipmentView> result = equipmentService.searchDynamic(
+                equipmentStatusId,
+                equipmentTypeId,
+                keyword
+        );
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

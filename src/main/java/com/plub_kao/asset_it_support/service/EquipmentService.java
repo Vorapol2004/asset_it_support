@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,8 +25,7 @@ public class EquipmentService {
 
 
     private final EquipmentRepository equipmentRepository;
-    private final EquipmentStatusService equipmentStatusService;
-    private final EquipmentTypeService equipmentTypeService;
+
     private final BorrowEquipmentRepository borrowEquipmentRepository;
     private final EquipmentTypeRepository equipmentTypeRepository;
     private final EquipmentStatusRepository equipmentStatusRepository;
@@ -60,19 +60,17 @@ public class EquipmentService {
 
     }
 
-
-    public List<EquipmentView> filterStatusAndType(@RequestParam Integer equipmentStatusId,
-                                                   @RequestParam Integer equipmentTypeId) {
-        if (equipmentStatusId != null && equipmentTypeId == null) {
-            return equipmentStatusService.FilterEquipmentStatus(equipmentStatusId);
+    public List<EquipmentView> searchDynamic(
+            Integer equipmentStatusId,
+            Integer equipmentTypeId,
+            String keyword
+    ) {
+        try {
+            List<EquipmentView> equipmentViews = equipmentRepository.search(equipmentStatusId, equipmentTypeId, keyword);
+            return equipmentViews;
+        } catch (Exception e) {
+            throw new RuntimeException("ไม่เจอ", e);
         }
-        if (equipmentStatusId == null && equipmentTypeId != null) {
-            return equipmentTypeService.FilterEquipmentType(equipmentTypeId);
-        }
-        if (equipmentStatusId != null && equipmentTypeId != null) {
-            return equipmentRepository.findByDynamicFilter(equipmentStatusId, equipmentTypeId);
-        }
-        return equipmentRepository.findAllEquipment();
     }
 
 
@@ -91,16 +89,6 @@ public class EquipmentService {
 
     }
 
-
-    //ค้นหาชื่อ equipment name,brand,model,serial_number,license_key ด้วย keyword
-    public List<EquipmentView> searchEquipmentKeyword(@RequestParam("keyword") String keyword) {
-        try {
-            return equipmentRepository.searchEquipmentKeyword(keyword);
-        } catch (Exception e) {
-            throw new RuntimeException("พัง", e);
-        }
-
-    }
 
     @Transactional
     public EquipmentResponse editEquipment(LotRequest.EquipmentRequest equipmentRequest) {

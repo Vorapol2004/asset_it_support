@@ -52,5 +52,7 @@ public interface BorrowView {
 
     String getEquipmentTypeName();
 
+    String getLotName();
+
 
 }

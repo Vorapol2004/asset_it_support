@@ -47,7 +47,6 @@ public class BorrowService {
 
 
     @Transactional
-    @Scheduled(cron = "/10 0 0 * * *") // รันทุกวันตอนเที่ยงคืน
     public void updateOverdueBorrowStatus() {
 
         System.out.println(">>> Running scheduled updateOverdueBorrowStatus()");
@@ -142,28 +141,6 @@ public class BorrowService {
                 departmentId,
                 keyword
         );
-
-        return convertToBorrowResponseTest(rows);
-    }
-
-    public List<BorrowResponseTest> filterStatusAndRole(Integer borrowStatusId,
-                                                        Integer roleId,
-                                                        Integer departmentId) {
-
-        List<BorrowView> rows;
-
-        if (borrowStatusId != null && roleId == null) {
-            rows = borrowStatusService.FilterBorrowStatus(borrowStatusId);
-
-        } else if (borrowStatusId == null && roleId != null) {
-            rows = roleService.FilterBorrowStatus(roleId);
-
-        } else if (borrowStatusId != null && roleId != null) {
-            rows = borrowRepository.findByDynamicFilter(borrowStatusId, roleId);
-
-        } else {
-            rows = borrowRepository.findAllBorrow();
-        }
 
         return convertToBorrowResponseTest(rows);
     }
@@ -359,7 +336,6 @@ public class BorrowService {
                 map.put(row.getId(), br);
             }
 
-            // อุปกรณ์
             if (row.getEquipmentId() != null) {
 
                 BorrowResponseTest.BorrowEquipment eq = new BorrowResponseTest.BorrowEquipment();
@@ -373,6 +349,7 @@ public class BorrowService {
                 eq.setEquipmentTypeName(row.getEquipmentTypeName());
                 eq.setDueDate(row.getDueDate());
                 eq.setReturnDate(row.getReturnDate());
+                eq.setLotName(row.getLotName());
 
                 br.getEquipments().add(eq);
             }

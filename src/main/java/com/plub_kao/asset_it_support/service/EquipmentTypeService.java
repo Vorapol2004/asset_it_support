@@ -28,13 +28,5 @@ public class EquipmentTypeService {
         }
     }
 
-    public List<EquipmentView> FilterEquipmentType(Integer id) {
-        try {
-            return equipmentRepository.FilterEquipmentType(id);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("พัง", e);
-        }
-    }
-
 
 }

@@ -30,14 +30,6 @@ public class EquipmentStatusService {
         }
     }
 
-    public List<EquipmentView> FilterEquipmentStatus(Integer id) {
-        try {
-            return equipmentRepository.FilterEquipmentStatus(id);
-        } catch (RuntimeException e) {
-            throw new RuntimeException("พัง", e);
-        }
-    }
-
 
 }
 
