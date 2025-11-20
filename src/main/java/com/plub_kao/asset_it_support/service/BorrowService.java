@@ -40,9 +40,6 @@ public class BorrowService {
 
     private final EquipmentStatusRepository equipmentStatusRepository;
 
-
-    private final RoleService roleService;
-    private final BorrowStatusService borrowStatusService;
     private final BorrowEquipmentRepository borrowEquipmentRepository;
 
 
@@ -54,13 +51,10 @@ public class BorrowService {
         System.out.println(">>> Finished scheduled update");
     }
 
-
-    public List<BorrowResponseTest> findAllBorrowed() {
-        List<BorrowView> rows = borrowRepository.findAllBorrow();
-        return convertToBorrowResponseTest(rows);
-    }
-
+    @Transactional
     public List<BorrowResponseTest> findAllBorrowedTest() {
+
+        updateOverdueBorrowStatus();
 
         List<BorrowView> rows = borrowRepository.findAllBorrow();
 
