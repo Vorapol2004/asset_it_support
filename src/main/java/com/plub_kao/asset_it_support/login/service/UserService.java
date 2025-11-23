@@ -23,7 +23,6 @@ public class UserService {
     }
 
     public Map<String, Object> create(CreateUserRequest req) {
-
         if (repo.findByEmail(req.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
@@ -31,11 +30,18 @@ public class UserService {
         User user = new User();
         user.setEmail(req.getEmail());
         user.setPassword(encoder.encode(req.getPassword()));
-        String role = req.getRole() == null ? "USER" : req.getRole().toUpperCase();
-        user.setRole("ROLE_" + role);
+
+        if (req.getRole() != null) {
+            String normalized = req.getRole().toUpperCase();
+            if (!normalized.startsWith("ROLE_")) {
+                normalized = "ROLE_" + normalized;
+            }
+            user.setRole(normalized);
+        } else {
+            user.setRole("ROLE_USER"); // Default
+        }
 
         repo.save(user);
-
         return Map.of("success", true, "message", "User created successfully", "user", user);
     }
 
